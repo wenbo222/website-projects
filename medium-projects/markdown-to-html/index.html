@@ -1,0 +1,39 @@
+<!--freeCodeCamp Project: https://www.freecodecamp.org/learn/javascript-v9/lab-markdown-to-html-converter/build-a-markdown-to-html-converter-->
+<!--The above link contains starter HTML and CSS code. Extra components have been added to the project.-->
+<!--Markdown Syntax Guide: https://www.markdownguide.org/basic-syntax/-->
+<!--Documentation Used: https://developer.mozilla.org/en-US/-->
+<!--JSDoc: https://jsdoc.app/-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../components/theme-loader.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../global-styles.css">
+    <link rel="stylesheet" href="styles.css">
+    <title>Markdown to HTML Converter</title>
+    <script type="module" src="../../components/global-header.js"></script>
+</head>
+<body>
+    <global-header></global-header>
+    <main>
+        <h1 id="title">Markdown to HTML Converter</h1>
+        <div id="container">
+            <div class="container">
+                <h2>Markdown Input:</h2>
+                <textarea id="markdown-input" placeholder="Enter your markdown here..."></textarea>
+            </div>
+            <div class="container">
+                <h2>HTML Preview:</h2>
+                <div id="preview"></div>
+            </div>
+            <div class="container">
+                <h2>Raw HTML Output:</h2>
+                <div id="html-output"></div>
+            </div>
+        </div>
+        <button id="copy-button" disabled>Copy HTML to Clipboard</button>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
