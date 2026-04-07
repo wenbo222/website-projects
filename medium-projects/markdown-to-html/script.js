@@ -13,59 +13,6 @@ function convertMarkdown(markdownText, globalRefs = null) {
         return text.replace(/[*_[\\\]#\-=!]/g, (c) => `&#${c.charCodeAt(0)};`).replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
-    /**
-     * Formats HTML output with proper multi-level indentation
-     * @param {string} html The unformatted HTML string
-     * @returns {string} The formatted HTML string
-     */
-    function formatHTMLOutput(html) {
-        const blockTags = 'blockquote|ul|ol|li|div';
-        const startClosesRegex = new RegExp(`^(<\\/(${blockTags})>)+`, 'i');
-        const opensRegex = new RegExp(`<(${blockTags})[ >]`, 'gi');
-        const closesRegex = new RegExp(`<\\/(${blockTags})>`, 'gi');
-
-        const lines = html.split('\n');
-        let formatted = [];
-        let indent = 0;
-        let inPre = false;
-        
-        lines.forEach(line => {
-            let trimmed = line.trim();
-            if (trimmed.length===0) {
-                formatted.push(inPre ? line : '');
-                return;
-            }
-            
-            // Deal with code in pre blocks
-            let isPreStart = trimmed.match(/<pre/i);
-            let isPreEnd = trimmed.match(/<\/pre>/i);
-            if (isPreStart) {
-                inPre = true;
-                formatted.push('    '.repeat(indent)+line);
-                if (isPreEnd) inPre = false;
-                return;
-            }
-            if (inPre) {
-                formatted.push(line);
-                if (isPreEnd) inPre = false;
-                return;
-            }
-            
-            // Deal with indentation
-            let printIndent = indent;
-            let startClosesMatch = trimmed.match(startClosesRegex);
-            if (startClosesMatch) {
-                let numStartCloses = (startClosesMatch[0].match(/<\//g) || []).length;
-                printIndent = Math.max(0, indent-numStartCloses);
-            }
-            formatted.push('    '.repeat(printIndent)+trimmed);
-            let opens = (trimmed.match(opensRegex) || []).length;
-            let closes = (trimmed.match(closesRegex) || []).length;
-            indent = Math.max(0, indent+opens-closes);
-        });
-        
-        return formatted.join('\n');
-    }
 
     let html = markdownText;
     const placeholders = [];
@@ -215,7 +162,52 @@ function convertMarkdown(markdownText, globalRefs = null) {
         html = html.replace(`MDINLINEPLACEHOLDER${i}X`, () => block);
     });
 
-    return formatHTMLOutput(html.trim());
+    // Indent HTML
+    const blockTags = 'blockquote|ul|ol|li|div';
+    const startClosesRegex = new RegExp(`^(<\\/(${blockTags})>)+`, 'i');
+    const opensRegex = new RegExp(`<(${blockTags})[ >]`, 'gi');
+    const closesRegex = new RegExp(`<\\/(${blockTags})>`, 'gi');
+
+    const lines = html.trim().split('\n');
+    let formatted = [];
+    let indent = 0;
+    let inPre = false;
+
+    lines.forEach(line => {
+        let trimmed = line.trim();
+        if (trimmed.length === 0) {
+            formatted.push(inPre ? line : '');
+            return;
+        }
+
+        // Deal with code in pre blocks
+        let isPreStart = trimmed.match(/<pre/i);
+        let isPreEnd = trimmed.match(/<\/pre>/i);
+        if (isPreStart) {
+            inPre = true;
+            formatted.push('    '.repeat(indent) + line);
+            if (isPreEnd) inPre = false;
+            return;
+        }
+        if (inPre) {
+            formatted.push(line);
+            if (isPreEnd) inPre = false;
+            return;
+        }
+
+        // Deal with indentation
+        let printIndent = indent;
+        let startClosesMatch = trimmed.match(startClosesRegex);
+        if (startClosesMatch) {
+            let numStartCloses = (startClosesMatch[0].match(/<\//g) || []).length;
+            printIndent = Math.max(0, indent - numStartCloses);
+        }
+        formatted.push('    '.repeat(printIndent) + trimmed);
+        let opens = (trimmed.match(opensRegex) || []).length;
+        let closes = (trimmed.match(closesRegex) || []).length;
+        indent = Math.max(0, indent+opens-closes);
+    });
+    return DOMPurify.sanitize(formatted.join('\n'));
 }
 
 
