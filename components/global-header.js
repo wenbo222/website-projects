@@ -56,7 +56,7 @@ class GlobalHeader extends HTMLElement {
                     align-items: center;
                     justify-content: space-between;
                     padding: 0 1.5rem;
-                    height: 60px;
+                    height: 3.75rem;
                     background-color: var(--bg-color);
                     color: var(--text-color);
                     border-bottom: 1px solid var(--border-color);
@@ -77,10 +77,10 @@ class GlobalHeader extends HTMLElement {
                     color: var(--text-hover);
                 }
                 .logo {
-                    width: 32px;
-                    height: 32px;
+                    width: 2rem;
+                    height: 2rem;
                     background-color: var(--text-color);
-                    border-radius: 4px;
+                    border-radius: 0.25rem;
                     margin-right: 0.8rem;
                     display: inline-block;
                     transition: background-color 0.3s;
@@ -91,11 +91,11 @@ class GlobalHeader extends HTMLElement {
                     display: flex;
                     align-items: center;
                     background: var(--search-bg);
-                    border-radius: 20px;
+                    border-radius: 1.25rem;
                     padding: 0.3rem 0.8rem;
                     margin-left: 2rem;
                     flex-grow: 1;
-                    max-width: 400px;
+                    max-width: 25rem;
                     transition: background 0.3s;
                 }
                 .search-bar svg {
@@ -143,17 +143,17 @@ class GlobalHeader extends HTMLElement {
                     display: none;
                     position: absolute;
                     background-color: var(--dropdown-bg);
-                    min-width: 220px;
-                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.15);
+                    min-width: 13.75rem;
+                    box-shadow: 0 0.5rem 1rem 0 rgba(0,0,0,0.15);
                     z-index: 1;
                     border: 1px solid var(--border-color);
-                    border-radius: 4px;
+                    border-radius: 0.25rem;
                     top: 100%;
                     left: 0;
                 }
                 .dropdown-content a {
                     color: var(--text-color);
-                    padding: 12px 16px;
+                    padding: 0.75rem 1rem;
                     text-decoration: none;
                     display: block;
                     font-size: 0.9rem;
@@ -182,7 +182,7 @@ class GlobalHeader extends HTMLElement {
                 }
                 .btn {
                     padding: 0.4rem 1rem;
-                    border-radius: 4px;
+                    border-radius: 0.25rem;
                     text-decoration: none;
                     font-size: 0.9rem;
                     font-weight: 600;
@@ -206,11 +206,11 @@ class GlobalHeader extends HTMLElement {
                     opacity: 0.9;
                 }
                 #theme-btn-toggle {
-                    width: 150px;
+                    width: 9.375rem;
                     text-align: center;
                 }
                 .actions .dropdown-content {
-                    min-width: 150px;
+                    min-width: 9.375rem;
                     left: auto;
                     right: 0;
                 }
@@ -220,20 +220,20 @@ class GlobalHeader extends HTMLElement {
                     display: none;
                     flex-direction: column;
                     cursor: pointer;
-                    gap: 4px;
-                    padding: 5px;
+                    gap: 0.25rem;
+                    padding: 0.3125rem;
                 }
                 .hamburger span {
                     display: block;
-                    width: 20px;
-                    height: 2px;
+                    width: 1.25rem;
+                    height: 0.125rem;
                     background-color: var(--hamburger-line);
                 }
                 
                 /* Shading */
                 .menu-backdrop {
                     position: fixed;
-                    top: 60px;
+                    top: 3.75rem;
                     left: 0;
                     right: 0;
                     bottom: 0;
@@ -254,14 +254,14 @@ class GlobalHeader extends HTMLElement {
                     flex-direction: column;
                     background-color: var(--dropdown-bg);
                     position: absolute;
-                    top: 60px;
+                    top: 3.75rem;
                     right: 0;
-                    width: 300px;
+                    width: 18.75rem;
                     padding: 1rem;
                     border-left: 1px solid var(--border-color);
                     border-bottom: 1px solid var(--border-color);
                     z-index: 100;
-                    max-height: calc(100vh - 60px);
+                    max-height: calc(100vh - 3.75rem);
                     overflow-y: auto;
                 }
                 .mobile-menu.open {
@@ -343,6 +343,13 @@ class GlobalHeader extends HTMLElement {
                             <a href="${rootUrl}mini-projects/task-mannager.html">Task Mannager</a>
                         </div>
                     </div>
+
+                    <div class="dropdown">
+                        <div class="dropbtn">Tech Demos</div>
+                        <div class="dropdown-content">
+                            <a href="${rootUrl}tech-demo/image-extractor/index.html">Image Extractor</a>
+                        </div>
+                    </div>
                 </nav>
 
                 <div class="actions">
@@ -354,7 +361,7 @@ class GlobalHeader extends HTMLElement {
                             <a href="#" class="theme-option" data-theme="dark">Dark Mode</a>
                         </div>
                     </div>
-                    <a href="#" class="btn btn-filled">GitHub</a>
+                    <a href="https://github.com/wenbo222/website-projects" target="_blank" class="btn btn-filled">GitHub</a>
                 </div>
 
                 <div class="hamburger" id="menu-toggle">
@@ -384,11 +391,14 @@ class GlobalHeader extends HTMLElement {
                 <a class="sub-link" href="${rootUrl}mini-projects/random-background.html">Random Background</a>
                 <a class="sub-link" href="${rootUrl}mini-projects/task-mannager.html">Task Mannager</a>
                 
+                <div class="group-title">Tech Demos</div>
+                <a class="sub-link" href="${rootUrl}tech-demo/image-extractor/index.html">Image Extractor</a>
+
                 <div class="group-title">Site Settings</div>
                 <button class="sub-link mobile-theme-btn" data-theme="system">Theme: System</button>
                 <button class="sub-link mobile-theme-btn" data-theme="light">Theme: Light</button>
                 <button class="sub-link mobile-theme-btn" data-theme="dark">Theme: Dark</button>
-                <a class="sub-link" href="#">GitHub</a>
+                <a class="sub-link" href="https://github.com/wenbo222/website-projects" target="_blank">GitHub</a>
             </div>
         `;
 
