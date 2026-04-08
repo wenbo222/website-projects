@@ -1,5 +1,6 @@
+# Not part of the project, but used for CI/CD
 # This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
+# They are provided by a third‑party and are governed by
 # separate terms of service, privacy policy, and support
 # documentation.
 # ESLint is a tool for identifying and reporting on patterns
@@ -10,7 +11,7 @@
 name: ESLint
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # suppress Node 20 deprecation warnings
 
 on:
   push:
@@ -29,6 +30,7 @@ jobs:
       contents: read
       security-events: write
       actions: read
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -46,12 +48,13 @@ jobs:
       - name: Run ESLint
         env:
           SARIF_ESLINT_IGNORE_SUPPRESSED: "true"
-        run: npx eslint .
-          --no-eslintrc
-          --env browser,node,es2021
-          --ext .js,.jsx,.ts,.tsx
-          --format @microsoft/eslint-formatter-sarif
-          --output-file eslint-results.sarif
+        run: |
+          npx eslint . \
+            --no-eslintrc \
+            --env browser,node,es2021 \
+            --ext .js,.jsx,.ts,.tsx \
+            --format @microsoft/eslint-formatter-sarif \
+            --output-file eslint-results.sarif
         continue-on-error: true
 
       - name: Ensure SARIF file exists
