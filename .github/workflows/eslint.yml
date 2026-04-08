@@ -25,10 +25,15 @@ jobs:
     permissions:
       contents: read
       security-events: write
-      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
+      actions: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
       - name: Install ESLint
         run: |
@@ -45,8 +50,15 @@ jobs:
           --output-file eslint-results.sarif
         continue-on-error: true
 
+      - name: Ensure SARIF file exists
+        if: always()
+        run: |
+          if [ ! -f eslint-results.sarif ]; then
+            echo "{}" > eslint-results.sarif
+          fi
+
       - name: Upload analysis results to GitHub
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: eslint-results.sarif
           wait-for-processing: true
