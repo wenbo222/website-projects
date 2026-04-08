@@ -1,33 +1,29 @@
 /* General styling */
-* , *::before, *::after {
-    box-sizing: border-box;
-}
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: var(--page-bg);
-    color: var(--page-text);
-    margin: 0;
     overflow-x: hidden;
 }
 main {
-    padding: 20px;
+    padding: 1.25rem;
+    padding-top: 0;
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 60px);
+    min-height: calc(100vh - 3.75rem);
 }
 
 /* Title styling */
 #title {
     text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
     color: var(--title-color);
-    margin-bottom: 25px;
+    margin-bottom: 1.5rem;
 }
 
 /* Container block layout */
 #container {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 2.5rem;
     width: 100%;
     margin: 0 auto;
     flex-grow: 1;
@@ -37,18 +33,19 @@ main {
 .container {
     display: flex;
     flex-direction: column;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 0.9rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
     min-width: 0;
 }
 #markdown-input, #html-output, #preview {
     width: 100%;
     max-width: 100%;
-    height: clamp(250px, calc(75vh - 200px), 700px);
+    min-height: 10rem;
+    height: calc(95vh - 18rem);
     border: 1px solid var(--border-color);
-    border-radius: 5px;
-    padding: 12px;
+    border-radius: 0.3rem;
+    padding: 0.75rem;
     font-family: inherit;
     color: inherit;
     font-size: 1rem;
@@ -79,37 +76,37 @@ main {
 /* Copy button styling */
 #copy-button {
     align-self: center;
-    margin: 20px auto 30px;
-    padding: 12px 24px;
+    margin: 1.25rem auto 1.875rem;
+    padding: 0.75rem 1.5rem;
     font-size:  1.1rem;
     font-weight: bold;
     color: white;
     background-color: var(--primary-color);
     border: none;
-    border-radius: 6px;
+    border-radius: 0.375rem;
     cursor: pointer;
     transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0.25rem 0.375rem rgba(0, 123, 255, 0.25);
 }
 #copy-button:not(:disabled):hover {
     background-color: var(--primary-hover);
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+    transform: translateY(-0.125rem) scale(1.02);
+    box-shadow: 0 0.375rem 0.75rem rgba(0, 123, 255, 0.3);
 }
 #copy-button:not(:disabled):active {
     transform: translateY(0) scale(0.96);
-    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 123, 255, 0.25);
 }
 #copy-button:disabled {
     background-color: #999999;
     cursor: not-allowed;
-    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 123, 255, 0.25);
 }
 
 /* Responsive layouts */
 
-/* Medium devices (600px and up) */
-@media (min-width: 600px) {
+/* Medium devices (37.5rem and up) */
+@media (min-width: 37.5rem) {
     #container {
         grid-template-columns: 1fr 1fr;
     }
@@ -118,8 +115,8 @@ main {
     }
 }
 
-/* Large devices (desktops, 1024px and up) */
-@media (min-width: 1024px) {
+/* Large devices (desktops, 64rem and up) */
+@media (min-width: 64rem) {
     #container {
         grid-template-columns: 1fr 1fr 1fr;
     }
