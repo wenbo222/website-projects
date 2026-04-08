@@ -1,4 +1,8 @@
+# Not part of the project, but used for CI/CD
 name: NodeJS with Webpack
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 on:
   push:
@@ -9,6 +13,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
 
     strategy:
       matrix:
