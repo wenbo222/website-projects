@@ -1,0 +1,26 @@
+<!--Tech Demo: Image Extractor-->
+<!---Users can upload an image file to extract it as a byte array-->
+<!--Then, the program uses the same byte array to reconstruct the image, showing it on the web page-->
+<!--Documentation: https://developer.mozilla.org/en-US/-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../components/theme-loader.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Extractor</title>
+    <link rel="stylesheet" href="../../global-styles.css">
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="../../components/global-header.js"></script>
+</head>
+<body>
+    <global-header></global-header>
+    <h1 id="title">Image Extractor</h1>
+    <main>
+        <input type="file" id="image-input" accept="image/*">
+        <button id="extract-btn" disabled>Extract Image</button>
+        <div id="image-output"></div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
