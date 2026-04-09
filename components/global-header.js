@@ -320,6 +320,9 @@ class GlobalHeader extends HTMLElement {
                         <div class="dropdown-content">
                             <a href="${rootUrl}major-projects/image-manipulation/index.html">Image Manipulation</a>
                             <a href="${rootUrl}major-projects/pathfinding-visualizer/index.html">Pathfinding Visualizer</a>
+                            <a href="${rootUrl}major-projects/web-browser/index.html">Web Browser</a>
+                            <a href="${rootUrl}major-projects/aes-encryption/index.html">AES Encryption</a>
+                            <a href="${rootUrl}major-projects/chess/index.html">Chess</a>
                         </div>
                     </div>
                     
@@ -337,7 +340,6 @@ class GlobalHeader extends HTMLElement {
                         <div class="dropdown-content">
                             <a href="${rootUrl}mini-projects/bill-calculator.html">Bill Calculator</a>
                             <a href="${rootUrl}mini-projects/clock.html">Clock</a>
-                            <a href="${rootUrl}mini-projects/image-extractor.html">Image Extractor</a>
                             <a href="${rootUrl}mini-projects/palindrome-checker.html">Palindrome Checker</a>
                             <a href="${rootUrl}mini-projects/random-background.html">Random Background</a>
                             <a href="${rootUrl}mini-projects/task-mannager.html">Task Mannager</a>
@@ -377,6 +379,9 @@ class GlobalHeader extends HTMLElement {
                 <div class="group-title">Major Projects</div>
                 <a class="sub-link" href="${rootUrl}major-projects/image-manipulation/index.html">Image Manipulation</a>
                 <a class="sub-link" href="${rootUrl}major-projects/pathfinding-visualizer/index.html">Pathfinding Visualizer</a>
+                <a class="sub-link" href="${rootUrl}major-projects/web-browser/index.html">Web Browser</a>
+                <a class="sub-link" href="${rootUrl}major-projects/aes-encryption/index.html">AES Encryption</a>
+                <a class="sub-link" href="${rootUrl}major-projects/chess/index.html">Chess</a>
 
                 <div class="group-title">Medium Projects</div>
                 <a class="sub-link" href="${rootUrl}medium-projects/markdown-to-html/index.html">Markdown to HTML</a>
@@ -386,8 +391,7 @@ class GlobalHeader extends HTMLElement {
                 <div class="group-title">Mini Projects</div>
                 <a class="sub-link" href="${rootUrl}mini-projects/bill-calculator.html">Bill Calculator</a>
                 <a class="sub-link" href="${rootUrl}mini-projects/clock.html">Clock</a>
-                <a class="sub-link" href="${rootUrl}mini-projects/image-extractor.html">Image Extractor</a>
-                <a class="sub-link" href="${rootUrl}mini-projects/palindrome.html">Palindrome</a>
+                <a class="sub-link" href="${rootUrl}mini-projects/palindrome-checker.html">Palindrome Checker</a>
                 <a class="sub-link" href="${rootUrl}mini-projects/random-background.html">Random Background</a>
                 <a class="sub-link" href="${rootUrl}mini-projects/task-mannager.html">Task Mannager</a>
                 
