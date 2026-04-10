@@ -8,8 +8,158 @@
     <script type="module" src="../components/global-header.js"></script>
     <link rel="stylesheet" href="../global-styles.css">
 </head>
+<style>
+    #clock {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+    }
+    #time {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+    #date {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    #controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+    select {
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--border-color);
+        color: var(--page-text);
+        font-family: inherit;
+        font-size: 1rem;
+        cursor: pointer;
+        width: 100%;
+        max-width: 300px;
+        transition: border-color 0.2s;
+    }
+    select:focus {
+        outline: none;
+        border-color: var(--primary-color);
+    }
+    #toggle-btn {
+        padding: 0.5rem 2rem;
+        border-radius: 8px;
+        border: none;
+        background-color: var(--secondary-color);
+    } 
+    #toggle-btn:hover {
+        background-color: var(--secondary-hover);
+    }
+</style>
 <body>
     <global-header></global-header>
+    <h1 id="title">Clock</h1>
+    <main>
+        <div id="clock">
+            <div id="date"></div>
+            <div id="time"></div>
 
+        </div>
+        <div id="controls">
+            <select id="timezone-select" aria-label="Select Time Zone">
+                <!-- Time zones will be populated by JS -->
+            </select>
+            <button id="toggle-btn">Stop</button>
+        </div>
+    </main>
 </body>
+<script>
+    /**
+     * Updates the clock display with the current time, date, and time zone information.
+     * @param {Date} date - The date to display.
+     */
+    function updateClock(date) {
+        const timezoneSelect = document.getElementById("timezone-select");
+        const selectedZone = timezoneSelect.value || Intl.DateTimeFormat().resolvedOptions().timeZone;
+        
+        lastDate = (date instanceof Date) ? date : new Date();
+        
+        const dateOptions = { 
+            timeZone: selectedZone,
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        };
+        const timeOptions = { 
+            timeZone: selectedZone,
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit',
+            hour12: true
+        };
+        
+        document.getElementById("date").textContent = lastDate.toLocaleDateString(undefined, dateOptions);
+        document.getElementById("time").textContent = lastDate.toLocaleTimeString(undefined, timeOptions);
+    }
+
+    /**
+     * Starts the clock interval to update every second.
+     */
+    function startClock() {
+        updateClock();
+        clockInterval = setInterval(() => updateClock(), 1000);
+    }
+
+    let clockInterval, lastDate = new Date();
+    
+    // Populate time zones
+    const select = document.getElementById("timezone-select");
+    const zones = Intl.supportedValuesOf('timeZone');
+    const currentZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const now = new Date();
+    zones.forEach(zone => {
+        const option = document.createElement("option");
+        option.value = zone;
+        let label = zone.replace(/_/g, ' ');
+
+        // Get short timezone name
+        const parts = new Intl.DateTimeFormat('en-US', {
+            timeZone: zone,
+            timeZoneName: 'short'
+        }).formatToParts(now);
+        const shortName = parts.find(p => p.type==='timeZoneName').value;
+        label += ` (${shortName})`;
+        
+        option.textContent = label;
+        if (zone===currentZone) {
+            option.selected = true;
+        }
+        select.appendChild(option);
+    });
+
+    const toggleButton = document.getElementById("toggle-btn");
+    select.addEventListener("change", () => {
+        if (toggleButton.textContent==="Start") {
+            updateClock(lastDate);
+        } else {
+            updateClock();
+        }
+    });
+    
+    startClock();
+    toggleButton.addEventListener("click", () => {
+        if (toggleButton.textContent==="Stop") {
+            toggleButton.textContent = "Start";
+            toggleButton.style.backgroundColor = "var(--primary-color)";
+            clearInterval(clockInterval);
+        } else {
+            toggleButton.textContent = "Stop";
+            toggleButton.style.backgroundColor = "var(--secondary-color)";
+            startClock();
+        }
+    });
+</script>
 </html>
