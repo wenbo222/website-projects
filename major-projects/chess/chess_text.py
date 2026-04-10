@@ -1389,218 +1389,219 @@ def game_log_f(board, start, end, turn):
     return piece+s
 
 
-initial_messages()
-print_board(board, turn, INDENT)
+if __name__=="__main__":
+    initial_messages()
+    print_board(board, turn, INDENT)
 
-# Note: No break statements is used because once the game ends, end_game() is activated, and the program will exit using exit() after this function ends.
-while True:
-    # Prints out whose turn it is
-    if turn=="W":
-        print("White's turn!")
-    else:
-        print("Black's turn!")
-
-    # Asks user for input of coordinates
-    print("Input the coordinate of the piece you want to move from, separated by a space:")
-    start=input_two_numbers_int()
-    print("Input the coordinate of the piece you want to move to, separated by a space:")
-    end=input_two_numbers_int()
-
-    if isvalid(board, start, end, turn, True):
-
-        # Add the number of full moves and add it to the logs
+    # Note: No break statements is used because once the game ends, end_game() is activated, and the program will exit using exit() after this function ends.
+    while True:
+        # Prints out whose turn it is
         if turn=="W":
-            count+=1
-            log+=str(count)+"."
-            log_f+=str(count)+"."
-        
-        # Modify castling rights
-        if start==[7, 4] and (castling_right_kw==True or castling_right_qw==True):
-            clear_rep()
-            castling_right_kw=False
-            castling_right_qw=False
-            
-        if start==[7, 7] and castling_right_kw==True:
-            castling_right_kw=False
-            clear_rep()
-            
-        if start==[7, 0] and castling_right_qw==True:
-            castling_right_qw=False
-            clear_rep()
-            
-        if start==[0, 4] and (castling_right_kb==True or castling_right_qb==True):
-            castling_right_kb=False
-            castling_right_qb=False
-            clear_rep()
-            
-        if start==[0, 7] and castling_right_kb==True:
-            castling_right_kb=False
-            clear_rep()
-            
-        if start==[0, 0] and castling_right_qb==True:
-            castling_right_qb=False
-            clear_rep()
-        
-        # Modify draw variables
-        if board[end[0]][end[1]]!="  " or board[start[0]][start[1]][1]=="P":
-            draw_count=0
-            clear_rep()
+            print("White's turn!")
         else:
-            draw_count+=1
+            print("Black's turn!")
 
-        # Modify logs
-        log+=game_log(board, start, end, turn)
-        log_f+=game_log_f(board, start, end, turn)
+        # Asks user for input of coordinates
+        print("Input the coordinate of the piece you want to move from, separated by a space:")
+        start=input_two_numbers_int()
+        print("Input the coordinate of the piece you want to move to, separated by a space:")
+        end=input_two_numbers_int()
+
+        if isvalid(board, start, end, turn, True):
+
+            # Add the number of full moves and add it to the logs
+            if turn=="W":
+                count+=1
+                log+=str(count)+"."
+                log_f+=str(count)+"."
         
-        # Move pieces
-        board[end[0]][end[1]]=board[start[0]][start[1]]
-        board[start[0]][start[1]]="  "
-
-        # Check for promotion
-        if promotion==True:
+            # Modify castling rights
+            if start==[7, 4] and (castling_right_kw==True or castling_right_qw==True):
+                clear_rep()
+                castling_right_kw=False
+                castling_right_qw=False
             
-            # Asks the user for piece
-            print("Which piece do you want the pawn promote to?")
-            print("Enter R for rook, N for knight, B for bishop, and Q for queen.")
-            response=input().upper().strip(",.!? ")
-            while response not in ["R", "N", "B", "Q"]:
-                print("You can only choose between rook, knight, bishop, and queen!")
+            if start==[7, 7] and castling_right_kw==True:
+                castling_right_kw=False
+                clear_rep()
+            
+            if start==[7, 0] and castling_right_qw==True:
+                castling_right_qw=False
+                clear_rep()
+            
+            if start==[0, 4] and (castling_right_kb==True or castling_right_qb==True):
+                castling_right_kb=False
+                castling_right_qb=False
+                clear_rep()
+            
+            if start==[0, 7] and castling_right_kb==True:
+                castling_right_kb=False
+                clear_rep()
+            
+            if start==[0, 0] and castling_right_qb==True:
+                castling_right_qb=False
+                clear_rep()
+        
+            # Modify draw variables
+            if board[end[0]][end[1]]!="  " or board[start[0]][start[1]][1]=="P":
+                draw_count=0
+                clear_rep()
+            else:
+                draw_count+=1
+
+            # Modify logs
+            log+=game_log(board, start, end, turn)
+            log_f+=game_log_f(board, start, end, turn)
+        
+            # Move pieces
+            board[end[0]][end[1]]=board[start[0]][start[1]]
+            board[start[0]][start[1]]="  "
+
+            # Check for promotion
+            if promotion==True:
+            
+                # Asks the user for piece
+                print("Which piece do you want the pawn promote to?")
                 print("Enter R for rook, N for knight, B for bishop, and Q for queen.")
                 response=input().upper().strip(",.!? ")
+                while response not in ["R", "N", "B", "Q"]:
+                    print("You can only choose between rook, knight, bishop, and queen!")
+                    print("Enter R for rook, N for knight, B for bishop, and Q for queen.")
+                    response=input().upper().strip(",.!? ")
 
-            # Update the board and logs
-            board[end[0]][end[1]]=turn+response
-            log+="="+response
-            log_f+="="+to_graph_piece(turn+response)
+                # Update the board and logs
+                board[end[0]][end[1]]=turn+response
+                log+="="+response
+                log_f+="="+to_graph_piece(turn+response)
 
-            # Reset
-            promotion=False
+                # Reset
+                promotion=False
 
-        # Check for en passant
-        if en_passant==True:
+            # Check for en passant
+            if en_passant==True:
             
-            # Update boards
+                # Update boards
+                if turn=="W":
+                    board[end[0]+1][end[1]]="  "
+                else:
+                    board[end[0]-1][end[1]]="  "
+
+                # Reset
+                en_passant=False
+
+            # Check for castling
+            if castling_kw==True:
+                board[7][5]="WR"
+                board[7][7]="  "
+                castling_kw=False
+
+            if castling_qw==True:
+                board[7][3]="WR"
+                board[7][0]="  "
+                castling_qw=False
+
+            if castling_kb==True:
+                board[0][5]="BR"
+                board[0][7]="  "
+                castling_kb=False
+
+            if castling_qb==True:
+                board[0][3]="BR"
+                board[0][0]="  "
+                castling_qb=False
+            
+            # Remove en passant rights if one move has passed
+            if turn=="W" and en_passant_right_w==True:
+                en_passant_right_w=False
+                clear_rep()
+            if turn=="B" and en_passant_right_b==True:
+                en_passant_right_b=False
+                clear_rep()
+
+            # Store boards
+            prev_boards.append(copy.deepcopy(board))
             if turn=="W":
-                board[end[0]+1][end[1]]="  "
+                index=rep_w(board)
+                if index is not None:
+                    rep_counts_w[index]+=1
+                else:
+                    rep_boards_w.append(copy.deepcopy(board))
+                    rep_counts_w.append(1)
+        
             else:
-                board[end[0]-1][end[1]]="  "
+                index=rep_b(board)
+                if index is not None:
+                    rep_counts_b[index]+=1
+                else:
+                    rep_boards_b.append(copy.deepcopy(board))
+                    rep_counts_b.append(1)
 
-            # Reset
+            # Do further modification of logs, (+ and space)
+            if in_check(board, king_pos(board, rev(turn)), turn, False):
+                log+="+"
+                log_f+="+"
+        
+            log+=" "
+            log_f+=" "
+
+            # Print out board before ending game
+            print_board(board, rev(turn), INDENT)
+        
+            # Check whether game ends
+            temp=status(board, turn)
+            if temp=="W":
+                print("White won by checkmate!")
+                log=log[:-2]
+                log_f=log_f[:-2]
+                log+="# 1-0"
+                log_f+="# 1-0"
+        
+            elif temp=="B":
+                print("Black won by checkmate!")
+                log=log[:-2]
+                log_f=log_f[:-2]
+                log+="# 0-1"
+                log_f+="# 0-1"
+        
+            elif temp=="D-50":
+                print("Draw by 50-move rule!")
+                log, log_f=draw()
+        
+            elif temp=="D-R":
+                print("Draw by threefold repetition!")
+                log, log_f=draw()
+        
+            elif temp=="D-S":
+                print("Draw by stalemate!")
+                log, log_f=draw()
+        
+            elif temp=="D-I":
+                print("Draw by insufficient material!")
+                log, log_f=draw()
+        
+            if temp!="G":
+                end_game()
+        
+            # Switch turns
+            if turn=="W":
+                turn="B"
+            else:
+                turn="W"
+        
+        else:
+            print("Invalid Move!")
+
+            # Remove the possible side effects of isvalid_pawn and isvalid_check.
             en_passant=False
-
-        # Check for castling
-        if castling_kw==True:
-            board[7][5]="WR"
-            board[7][7]="  "
-            castling_kw=False
-
-        if castling_qw==True:
-            board[7][3]="WR"
-            board[7][0]="  "
-            castling_qw=False
-
-        if castling_kb==True:
-            board[0][5]="BR"
-            board[0][7]="  "
-            castling_kb=False
-
-        if castling_qb==True:
-            board[0][3]="BR"
-            board[0][0]="  "
-            castling_qb=False
-            
-        # Remove en passant rights if one move has passed
-        if turn=="W" and en_passant_right_w==True:
-            en_passant_right_w=False
-            clear_rep()
-        if turn=="B" and en_passant_right_b==True:
-            en_passant_right_b=False
-            clear_rep()
-
-        # Store boards
-        prev_boards.append(copy.deepcopy(board))
-        if turn=="W":
-            index=rep_w(board)
-            if index is not None:
-                rep_counts_w[index]+=1
+            promotion=False
+            check=False
+            if turn=="W":
+                en_passant_right_b=False
             else:
-                rep_boards_w.append(copy.deepcopy(board))
-                rep_counts_w.append(1)
-        
-        else:
-            index=rep_b(board)
-            if index is not None:
-                rep_counts_b[index]+=1
-            else:
-                rep_boards_b.append(copy.deepcopy(board))
-                rep_counts_b.append(1)
+                en_passant_right_w=False
 
-        # Do further modification of logs, (+ and space)
-        if in_check(board, king_pos(board, rev(turn)), turn, False):
-            log+="+"
-            log_f+="+"
-        
-        log+=" "
-        log_f+=" "
-
-        # Print out board before ending game
-        print_board(board, rev(turn), INDENT)
-        
-        # Check whether game ends
-        temp=status(board, turn)
-        if temp=="W":
-            print("White won by checkmate!")
-            log=log[:-2]
-            log_f=log_f[:-2]
-            log+="# 1-0"
-            log_f+="# 1-0"
-        
-        elif temp=="B":
-            print("Black won by checkmate!")
-            log=log[:-2]
-            log_f=log_f[:-2]
-            log+="# 0-1"
-            log_f+="# 0-1"
-        
-        elif temp=="D-50":
-            print("Draw by 50-move rule!")
-            log, log_f=draw()
-        
-        elif temp=="D-R":
-            print("Draw by threefold repetition!")
-            log, log_f=draw()
-        
-        elif temp=="D-S":
-            print("Draw by stalemate!")
-            log, log_f=draw()
-        
-        elif temp=="D-I":
-            print("Draw by insufficient material!")
-            log, log_f=draw()
-        
-        if temp!="G":
-            end_game()
-        
-        # Switch turns
-        if turn=="W":
-            turn="B"
-        else:
-            turn="W"
-        
-    else:
-        print("Invalid Move!")
-
-        # Remove the possible side effects of isvalid_pawn and isvalid_check.
-        en_passant=False
-        promotion=False
-        check=False
-        if turn=="W":
-            en_passant_right_b=False
-        else:
-            en_passant_right_w=False
-
-        # Print out board again for user to check
-        print_board(board, turn, INDENT)
+            # Print out board again for user to check
+            print_board(board, turn, INDENT)
     
 
 
