@@ -274,6 +274,11 @@ class GlobalHeader extends HTMLElement {
                     text-transform: uppercase;
                     padding: 1rem 0 0.2rem 0;
                     font-weight: 700;
+                    text-decoration: none;
+                    display: block;
+                }
+                .mobile-menu .group-title:hover {
+                    color: var(--text-hover);
                 }
                 .mobile-menu a, .mobile-menu button {
                     color: var(--text-color);
@@ -317,18 +322,18 @@ class GlobalHeader extends HTMLElement {
 
                 <nav class="nav-links">
                     <div class="dropdown">
-                        <div class="dropbtn">Major Projects</div>
+                        <a href="${rootUrl}major-projects/index.html" class="dropbtn">Major Projects</a>
                         <div class="dropdown-content">
+                            <a href="${rootUrl}major-projects/aes-encryption/index.html">AES Encryption</a>
+                            <a href="${rootUrl}major-projects/chess/index.html">Chess</a>
                             <a href="${rootUrl}major-projects/image-manipulation/index.html">Image Manipulation</a>
                             <a href="${rootUrl}major-projects/pathfinding-visualizer/index.html">Pathfinding Visualizer</a>
                             <a href="${rootUrl}major-projects/web-browser/index.html">Web Browser</a>
-                            <a href="${rootUrl}major-projects/aes-encryption/index.html">AES Encryption</a>
-                            <a href="${rootUrl}major-projects/chess/index.html">Chess</a>
                         </div>
                     </div>
                     
                     <div class="dropdown">
-                        <div class="dropbtn">Medium Projects</div>
+                        <a href="${rootUrl}medium-projects/index.html" class="dropbtn">Medium Projects</a>
                         <div class="dropdown-content">
                             <a href="${rootUrl}medium-projects/markdown-to-html/index.html">Markdown to HTML</a>
                             <a href="${rootUrl}medium-projects/pixel-art-editor/index.html">Pixel Art Editor</a>
@@ -337,20 +342,22 @@ class GlobalHeader extends HTMLElement {
                     </div>
 
                     <div class="dropdown">
-                        <div class="dropbtn">Mini Projects</div>
+                        <a href="${rootUrl}mini-projects/index.html" class="dropbtn">Mini Projects</a>
                         <div class="dropdown-content">
                             <a href="${rootUrl}mini-projects/bill-calculator.html">Bill Calculator</a>
                             <a href="${rootUrl}mini-projects/clock.html">Clock</a>
                             <a href="${rootUrl}mini-projects/palindrome-checker.html">Palindrome Checker</a>
                             <a href="${rootUrl}mini-projects/random-background.html">Random Background</a>
-                            <a href="${rootUrl}mini-projects/task-mannager.html">Task Mannager</a>
+                            <a href="${rootUrl}mini-projects/task-manager.html">Task Manager</a>
                         </div>
                     </div>
 
                     <div class="dropdown">
-                        <div class="dropbtn">Tech Demos</div>
+                        <a href="${rootUrl}tech-demo/index.html" class="dropbtn">Tech Demos</a>
                         <div class="dropdown-content">
+                            <a href="${rootUrl}tech-demo/informal-report/index.html">Informal Report</a>
                             <a href="${rootUrl}tech-demo/image-extractor/index.html">Image Extractor</a>
+                            <a href="${rootUrl}tech-demo/sample-bfs/index.html">Sample BFS</a>
                         </div>
                     </div>
                 </nav>
@@ -377,27 +384,29 @@ class GlobalHeader extends HTMLElement {
             <div class="menu-backdrop" id="menu-backdrop"></div>
 
             <div class="mobile-menu" id="mobile-menu">
-                <div class="group-title">Major Projects</div>
+                <a href="${rootUrl}major-projects/index.html" class="group-title">Major Projects</a>
+                <a class="sub-link" href="${rootUrl}major-projects/aes-encryption/index.html">AES Encryption</a>
+                <a class="sub-link" href="${rootUrl}major-projects/chess/index.html">Chess</a>
                 <a class="sub-link" href="${rootUrl}major-projects/image-manipulation/index.html">Image Manipulation</a>
                 <a class="sub-link" href="${rootUrl}major-projects/pathfinding-visualizer/index.html">Pathfinding Visualizer</a>
                 <a class="sub-link" href="${rootUrl}major-projects/web-browser/index.html">Web Browser</a>
-                <a class="sub-link" href="${rootUrl}major-projects/aes-encryption/index.html">AES Encryption</a>
-                <a class="sub-link" href="${rootUrl}major-projects/chess/index.html">Chess</a>
 
-                <div class="group-title">Medium Projects</div>
+                <a href="${rootUrl}medium-projects/index.html" class="group-title">Medium Projects</a>
                 <a class="sub-link" href="${rootUrl}medium-projects/markdown-to-html/index.html">Markdown to HTML</a>
                 <a class="sub-link" href="${rootUrl}medium-projects/pixel-art-editor/index.html">Pixel Art Editor</a>
                 <a class="sub-link" href="${rootUrl}medium-projects/typing-test/index.html">Typing Test</a>
 
-                <div class="group-title">Mini Projects</div>
+                <a href="${rootUrl}mini-projects/index.html" class="group-title">Mini Projects</a>
                 <a class="sub-link" href="${rootUrl}mini-projects/bill-calculator.html">Bill Calculator</a>
                 <a class="sub-link" href="${rootUrl}mini-projects/clock.html">Clock</a>
                 <a class="sub-link" href="${rootUrl}mini-projects/palindrome-checker.html">Palindrome Checker</a>
                 <a class="sub-link" href="${rootUrl}mini-projects/random-background.html">Random Background</a>
-                <a class="sub-link" href="${rootUrl}mini-projects/task-mannager.html">Task Mannager</a>
+                <a class="sub-link" href="${rootUrl}mini-projects/task-manager.html">Task Manager</a>
                 
-                <div class="group-title">Tech Demos</div>
+                <a href="${rootUrl}tech-demo/index.html" class="group-title">Tech Demos</a>
+                <a class="sub-link" href="${rootUrl}tech-demo/informal-report/index.html">Informal Report</a>
                 <a class="sub-link" href="${rootUrl}tech-demo/image-extractor/index.html">Image Extractor</a>
+                <a class="sub-link" href="${rootUrl}tech-demo/sample-bfs/index.html">Sample BFS</a>
 
                 <div class="group-title">Site Settings</div>
                 <button class="sub-link mobile-theme-btn" data-theme="system">Theme: System</button>
