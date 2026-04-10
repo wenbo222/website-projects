@@ -353,7 +353,7 @@ class GlobalHeader extends HTMLElement {
                     </div>
 
                     <div class="dropdown">
-                        <a href="${rootUrl}tech-demo/index.html" class="dropbtn">Tech Demos</a>
+                        <a href="${rootUrl}tech-demo/index.html" class="dropbtn">Tech Demo</a>
                         <div class="dropdown-content">
                             <a href="${rootUrl}tech-demo/informal-report/index.html">Informal Report</a>
                             <a href="${rootUrl}tech-demo/image-extractor/index.html">Image Extractor</a>
@@ -403,7 +403,7 @@ class GlobalHeader extends HTMLElement {
                 <a class="sub-link" href="${rootUrl}mini-projects/random-background.html">Random Background</a>
                 <a class="sub-link" href="${rootUrl}mini-projects/task-manager.html">Task Manager</a>
                 
-                <a href="${rootUrl}tech-demo/index.html" class="group-title">Tech Demos</a>
+                <a href="${rootUrl}tech-demo/index.html" class="group-title">Tech Demo</a>
                 <a class="sub-link" href="${rootUrl}tech-demo/informal-report/index.html">Informal Report</a>
                 <a class="sub-link" href="${rootUrl}tech-demo/image-extractor/index.html">Image Extractor</a>
                 <a class="sub-link" href="${rootUrl}tech-demo/sample-bfs/index.html">Sample BFS</a>
