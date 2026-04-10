@@ -8,6 +8,7 @@
 import math
 
 import copy
+import sys
 
 # S-box table
 table=[["63", "7c", "77", "7b", "f2", "6b", "6f", "c5", "30", "01", "67", "2b", "fe", "d7", "ab", "76"],
@@ -537,66 +538,92 @@ def reassemble(blocks, flag):
                     text+=chr(int(block[i][j], base=16))
     return text
 
-# Choose encryption/decryption
-choice=input("Encrypt or decrypt? ").lower().strip("!,.? ")
-while choice not in ["encrypt", "decrypt"]:
-    choice=input("Invalid input! Encrypt or decrypt? ").lower().strip("!,.? ")
-if choice=="encrypt":
-    print("Note that encrypting only accpets real text (not hexadecimals).")
-else:
-    print("Note that decrypting only accepts hexadecimals, separated by spaces.")
+def process_request(choice, message, rounds, raw_key, raw_iv):
+    """
+    process_request(string, string, int, string, string) -> string
 
-# Enter message
-message=input("Enter the message you want to "+choice+": ")
-print("Choose the number of rounds you want to "+choice+": ")
-print("Note that AES-128 requires 11 rounds, AES-192 requires 13 rounds, and AES-256 requires 15 rounds.")
-rounds=int(input_a_number())
-while rounds not in [11, 13, 15]:
-    print("Please input the correct number: ")
-    rounds=int(input_a_number())
+    Processes the request to encrypt or decrypt the message.
+    """
+    
+    key=""
+    for i in range(len(raw_key)):
+        key+=decimal_to_16(ord(raw_key[i]), 2)
 
-# Input Key
-print("Please input the key: ")
-temp=input()
-if rounds==11:
-    while len(temp)!=16:
-        print("The key must be 16 characters long.")
-        temp=input()
-elif rounds==13:
-    while len(temp)!=24:
-        print("The key must be 24 characters long.")
-        temp=input()
-else:
-    while len(temp)!=32:
-        print("The key must be 32 characters long.")
-        temp=input()
-key=""
-for i in range(len(temp)):
-    key+=decimal_to_16(ord(temp[i]), 2)
+    iv=[]
+    temp1=[]
+    temp2=[]
+    temp3=[]
+    temp4=[]
+    for i in range(0, 16, 4):
+        temp1.append(decimal_to_16(ord(raw_iv[i]), 2))
+        temp2.append(decimal_to_16(ord(raw_iv[i+1]), 2))
+        temp3.append(decimal_to_16(ord(raw_iv[i+2]), 2))
+        temp4.append(decimal_to_16(ord(raw_iv[i+3]), 2))
+    iv.append(temp1)
+    iv.append(temp2)
+    iv.append(temp3)
+    iv.append(temp4)
 
-# Input initialization vector
-print("Please input the initialization vector: (16 characters long)")
-temp=input()
-while len(temp)!=16:
-    print("The initialization vector must be 16 characters long!")
-    temp=input()
-iv=[]
-temp1=[]
-temp2=[]
-temp3=[]
-temp4=[]
-for i in range(0, 16, 4):
-    temp1.append(decimal_to_16(ord(temp[i]), 2))
-    temp2.append(decimal_to_16(ord(temp[i+1]), 2))
-    temp3.append(decimal_to_16(ord(temp[i+2]), 2))
-    temp4.append(decimal_to_16(ord(temp[i+3]), 2))
-iv.append(temp1)
-iv.append(temp2)
-iv.append(temp3)
-iv.append(temp4)
+    if choice=="encrypt":
+        return encrypt(message, key, iv, rounds, True)
+    else:
+        return encrypt(message, key, iv, rounds, False)
 
-# Print out the ciphertext/plaintext
-if choice=="encrypt":
-    print("Here is the ciphertext:", encrypt(message, key, iv, rounds, True))
-else:
-    print("Here is the plaintext:", encrypt(message, key, iv, rounds, False))
+if __name__=="__main__":
+    if len(sys.argv)>1:
+        # CLI Mode: choice, message, rounds, key, iv
+        choice=sys.argv[1].lower()
+        message=sys.argv[2]
+        rounds=int(sys.argv[3])
+        raw_key=sys.argv[4]
+        raw_iv=sys.argv[5]
+        print(process_request(choice, message, rounds, raw_key, raw_iv))
+    else:
+        # Interactive Mode
+        # Choose encryption/decryption
+        choice=input("Encrypt or decrypt? ").lower().strip("!,.? ")
+        while choice not in ["encrypt", "decrypt"]:
+            choice=input("Invalid input! Encrypt or decrypt? ").lower().strip("!,.? ")
+        if choice=="encrypt":
+            print("Note that encrypting only accpets real text (not hexadecimals).")
+        else:
+            print("Note that decrypting only accepts hexadecimals, separated by spaces.")
+    
+        # Enter message
+        message=input("Enter the message you want to "+choice+": ")
+        print("Choose the number of rounds you want to "+choice+": ")
+        print("Note that AES-128 requires 11 rounds, AES-192 requires 13 rounds, and AES-256 requires 15 rounds.")
+        rounds=int(input_a_number())
+        while rounds not in [11, 13, 15]:
+            print("Please input the correct number: ")
+            rounds=int(input_a_number())
+    
+        # Input Key
+        print("Please input the key: ")
+        temp_key=input()
+        if rounds==11:
+            while len(temp_key)!=16:
+                print("The key must be 16 characters long.")
+                temp_key=input()
+        elif rounds==13:
+            while len(temp_key)!=24:
+                print("The key must be 24 characters long.")
+                temp_key=input()
+        else:
+            while len(temp_key)!=32:
+                print("The key must be 32 characters long.")
+                temp_key=input()
+    
+        # Input initialization vector
+        print("Please input the initialization vector: (16 characters long)")
+        temp_iv=input()
+        while len(temp_iv)!=16:
+            print("The initialization vector must be 16 characters long!")
+            temp_iv=input()
+    
+        # Print out the ciphertext/plaintext
+        result=process_request(choice, message, rounds, temp_key, temp_iv)
+        if choice=="encrypt":
+            print("Here is the ciphertext:", result)
+        else:
+            print("Here is the plaintext:", result)
