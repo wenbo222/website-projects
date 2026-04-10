@@ -8,8 +8,24 @@
     <script type="module" src="../components/global-header.js"></script>
     <link rel="stylesheet" href="../global-styles.css">
 </head>
+<style>
+    #container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
 <body>
     <global-header></global-header>
-
+    <h1 id="title">Random Background</h1>
+    <div id="container">
+        <p id="description">Click on the following button to randomly change the background!</p>
+        <button id="flip-btn">Flip Background</button>
+    </div>
 </body>
+<script>
+    const flipBtn = document.getElementById("flip-btn");
+    flipBtn.addEventListener("click", () => document.body.style.backgroundColor = `#${Math.floor(Math.random()*0xffffff).toString(16).padStart(6, "0")}`);
+</script>
 </html>
