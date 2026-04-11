@@ -62,6 +62,11 @@ export const ProjectFilesMap = {
     "/tech-demo/informal-report/index.html": [
         "index.html"
     ],
+    "/tech-demo/sample-bfs/index.html": [
+        "index.html",
+        "styles.css",
+        "script.js"
+    ],
     "/mini-projects/bill-calculator.html": [
         "bill-calculator.html"
     ],
