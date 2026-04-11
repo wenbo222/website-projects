@@ -32,3 +32,10 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: "main"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Only fail on critical bugs, not style/formatting issues
+          VALIDATE_JAVASCRIPT_STANDARD: false
+          VALIDATE_TYPESCRIPT_STANDARD: false
+          VALIDATE_CSS: false
+          VALIDATE_JSCPD: false
+          VALIDATE_MARKDOWN: false
+          BASH_SEVERITY: error
