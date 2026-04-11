@@ -11,6 +11,10 @@ export const ProjectFilesMap = {
     "/tech-demo/index.html": [
         "index.html"
     ],
+    "/major-projects/technical-report/index.html": [
+        "index.html",
+        "styles.css"
+    ],
     "/major-projects/aes-encryption/index.html": [
         "index.html",
         "styles.css",

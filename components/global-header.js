@@ -336,6 +336,7 @@ class GlobalHeader extends HTMLElement {
                     <div class="dropdown">
                         <a href="${rootUrl}major-projects/index.html" class="dropbtn">Major Projects</a>
                         <div class="dropdown-content">
+                            <a href="${rootUrl}major-projects/technical-report/index.html">Technical Report</a>
                             <a href="${rootUrl}major-projects/aes-encryption/index.html">AES Encryption</a>
                             <a href="${rootUrl}major-projects/chess/index.html">Chess</a>
                             <a href="${rootUrl}major-projects/image-manipulation/index.html">Image Manipulation</a>
@@ -398,6 +399,7 @@ class GlobalHeader extends HTMLElement {
 
             <div class="mobile-menu" id="mobile-menu">
                 <a href="${rootUrl}major-projects/index.html" class="group-title">Major Projects</a>
+                <a class="sub-link" href="${rootUrl}major-projects/technical-report/index.html">Technical Report</a>
                 <a class="sub-link" href="${rootUrl}major-projects/aes-encryption/index.html">AES Encryption</a>
                 <a class="sub-link" href="${rootUrl}major-projects/chess/index.html">Chess</a>
                 <a class="sub-link" href="${rootUrl}major-projects/image-manipulation/index.html">Image Manipulation</a>
