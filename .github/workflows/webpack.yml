@@ -1,4 +1,4 @@
-# Not part of the project, but used for CI/CD
+# Not part of the project, but used for CI
 name: NodeJS with Webpack
 
 env:
