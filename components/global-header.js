@@ -30,7 +30,7 @@ class GlobalHeader extends HTMLElement {
                     --btn-outline-border: #333333;
                     --btn-outline-hover: rgba(0, 0, 0, 0.05);
                     --btn-filled-bg: #333333;
-                    --btn-filled-text: #fff;
+                    --btn-filled-text: #ffffff;
                     --menu-group-title: #666666;
                     --hamburger-line: #333333;
                 }
@@ -94,9 +94,9 @@ class GlobalHeader extends HTMLElement {
                     background: var(--search-bg);
                     border-radius: 1.25rem;
                     padding: 0.3rem 0.8rem;
-                    margin-left: 2rem;
+                    margin-left: 1.5rem;
                     flex-grow: 1;
-                    max-width: 25rem;
+                    max-width: 20rem;
                     transition: background 0.3s;
                 }
                 .search-bar svg {
@@ -119,8 +119,8 @@ class GlobalHeader extends HTMLElement {
                 .nav-links {
                     display: flex;
                     align-items: center;
-                    gap: 1.5rem;
-                    margin-left: 2rem;
+                    gap: 1.2rem;
+                    margin-left: 1.5rem;
                     flex-shrink: 0;
                     white-space: nowrap;
                 }
@@ -176,8 +176,8 @@ class GlobalHeader extends HTMLElement {
                 .actions {
                     display: flex;
                     align-items: center;
-                    gap: 1rem;
-                    margin-left: 2.5rem;
+                    gap: 0.75rem;
+                    margin-left: 1.5rem;
                     flex-shrink: 0;
                     white-space: nowrap;
                 }
@@ -207,8 +207,20 @@ class GlobalHeader extends HTMLElement {
                     opacity: 0.9;
                 }
                 #theme-btn-toggle {
-                    width: 9.375rem;
+                    width: 8.5rem;
                     text-align: center;
+                }
+                #dev-mode-toggle {
+                    width: 8.5rem;
+                    text-align: center;
+                }
+                .btn-active {
+                    background-color: var(--text-color);
+                    color: var(--bg-color);
+                }
+                .btn-active:hover {
+                    background-color: var(--text-hover);
+                    color: var(--bg-color);
                 }
                 .actions .dropdown-content {
                     min-width: 9.375rem;
@@ -371,6 +383,7 @@ class GlobalHeader extends HTMLElement {
                             <a href="#" class="theme-option" data-theme="dark">Dark Mode</a>
                         </div>
                     </div>
+                    <button class="btn btn-outline" id="dev-mode-toggle">Dev Mode: Off</button>
                     <a href="https://github.com/wenbo222/website-projects" target="_blank" class="btn btn-filled">GitHub</a>
                 </div>
 
@@ -412,6 +425,7 @@ class GlobalHeader extends HTMLElement {
                 <button class="sub-link mobile-theme-btn" data-theme="system">Theme: System</button>
                 <button class="sub-link mobile-theme-btn" data-theme="light">Theme: Light</button>
                 <button class="sub-link mobile-theme-btn" data-theme="dark">Theme: Dark</button>
+                <button class="sub-link" id="mobile-dev-toggle">Turn On Dev Mode</button>
                 <a class="sub-link" href="https://github.com/wenbo222/website-projects" target="_blank">GitHub</a>
             </div>
         `;
@@ -450,17 +464,54 @@ class GlobalHeader extends HTMLElement {
             applyTheme(mode);
         };
 
+        /** Toggles developer mode */
+        const toggleDevMode = (e) => {
+            if (e) e.preventDefault();
+            const newState = !(localStorage.getItem('dev-mode-enabled')==='true');
+            localStorage.setItem('dev-mode-enabled', newState);
+            applyDevMode(newState);
+        };
+
+        /** Applies developer mode state */
+        const applyDevMode = (enabled) => {
+            let devEl = document.querySelector('developer-mode');
+            if (enabled) {
+                if (!devEl) {
+                    devEl = document.createElement('developer-mode');
+                    document.body.appendChild(devEl);
+                }
+                devModeToggle.textContent = 'Dev Mode: On';
+                devModeToggle.classList.add('btn-active');
+                mobileDevToggle.textContent = 'Turn Off Dev Mode';
+            } else {
+                if (devEl) devEl.remove();
+                devModeToggle.textContent = 'Dev Mode: Off';
+                devModeToggle.classList.remove('btn-active');
+                mobileDevToggle.textContent = 'Turn On Dev Mode';
+            }
+        };
+
         const toggle = this.shadowRoot.getElementById('menu-toggle');
         const menu = this.shadowRoot.getElementById('mobile-menu');
         const backdrop = this.shadowRoot.getElementById('menu-backdrop');
         const themeBtnToggle = this.shadowRoot.getElementById('theme-btn-toggle');
+        const devModeToggle = this.shadowRoot.getElementById('dev-mode-toggle');
+        const mobileDevToggle = this.shadowRoot.getElementById('mobile-dev-toggle');
         const desktopOptions = this.shadowRoot.querySelectorAll('.theme-option');
         const mobileOptions = this.shadowRoot.querySelectorAll('.mobile-theme-btn');
         let currentMode = localStorage.getItem('global-theme') || 'system';
+        let devModeEnabled = localStorage.getItem('dev-mode-enabled')==='true';
 
         // Hamburger Menu Logic
         toggle.addEventListener('click', toggleMenu);
         backdrop.addEventListener('click', toggleMenu);
+
+        // Dev Mode Logic
+        devModeToggle.addEventListener('click', toggleDevMode);
+        mobileDevToggle.addEventListener('click', (e) => {
+            toggleDevMode(e);
+            toggleMenu();
+        });
 
         // Theme Switcher Logic
         desktopOptions.forEach(opt => {
@@ -474,8 +525,10 @@ class GlobalHeader extends HTMLElement {
             });
         });
 
-        // Initial application and OS listener
+        // Initial application
         applyTheme(currentMode);
+        applyDevMode(devModeEnabled);
+
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
             if (currentMode==='system') {
                 applyTheme('system');
@@ -490,20 +543,16 @@ class GlobalHeader extends HTMLElement {
             }
         });
 
-        // Sync theme across multiple tabs instantly
+        // Sync state across multiple tabs
         window.addEventListener('storage', (e) => {
             if (e.key==='global-theme') {
                 currentMode = e.newValue || 'system';
                 applyTheme(currentMode);
             }
-        });
-
-        // Inject developer mode
-        setTimeout(() => {
-            if (!document.querySelector('developer-mode')) {
-                document.body.appendChild(document.createElement('developer-mode'));
+            if (e.key==='dev-mode-enabled') {
+                applyDevMode(e.newValue==='true');
             }
-        }, 0);
+        });
     }
 }
 
