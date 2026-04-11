@@ -3,7 +3,14 @@ const extractBtn = document.getElementById('extract-btn');
 const imageOutput = document.getElementById('image-output');
 
 imageInput.addEventListener('change', () => {
-    extractBtn.disabled = !imageInput.files[0];
+    const file = imageInput.files[0];
+    if (file && !file.type.startsWith('image/')) { // account for non-image cases
+        imageOutput.innerHTML = `<p class="error-message">Error: Please select a valid image file.</p>`;
+        extractBtn.disabled = true;
+    } else {
+        imageOutput.innerHTML = "";
+        extractBtn.disabled = !file;
+    }
 });
 
 extractBtn.addEventListener('click', () => {

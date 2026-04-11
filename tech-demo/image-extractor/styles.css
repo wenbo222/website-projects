@@ -12,6 +12,11 @@ main {
     color: var(--title-color);
     margin-bottom: 1.5rem;
 }
+.error-message {
+    color: #ff4444;
+    font-weight: 500;
+    margin: 1rem 0;
+}
 
 /* File input styling */
 #image-input {
