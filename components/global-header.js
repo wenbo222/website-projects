@@ -1,4 +1,5 @@
 // TO-DO: Add logo and search functionality
+import './developer-mode.js';
 class GlobalHeader extends HTMLElement {
     constructor() {
         super();
@@ -487,6 +488,13 @@ class GlobalHeader extends HTMLElement {
                 applyTheme(currentMode);
             }
         });
+
+        // Inject developer mode
+        setTimeout(() => {
+            if (!document.querySelector('developer-mode')) {
+                document.body.appendChild(document.createElement('developer-mode'));
+            }
+        }, 0);
     }
 }
 
