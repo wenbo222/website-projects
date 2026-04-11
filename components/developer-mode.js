@@ -70,22 +70,22 @@ class DeveloperMode extends HTMLElement {
                 }
                 
                 /* Light mode */
-                .token.comment { color: #6a737d !important; }
+                .token.comment { color: #5f6771 !important; }
                 .token.punctuation { color: var(--page-text) !important; }
-                .token.keyword, .token.operator { color: #d73a49 !important; }
-                .token.string { color: #032f62 !important; }
-                .token.function { color: #6f42c1 !important; }
-                .token.number { color: #005cc5 !important; }
-                .token.class-name { color: #e36209 !important; }
+                .token.keyword, .token.operator { color: #8e121e !important; }
+                .token.string { color: #042347 !important; }
+                .token.function { color: #6c3bc6 !important; }
+                .token.number { color: #1072b7 !important; }
+                .token.class-name { color: #82441a !important; }
 
                 /* Dark mode */
-                :host([data-theme="dark"]) .token.comment { color: #8b949e !important; }
+                :host([data-theme="dark"]) .token.comment { color: #8994a1 !important; }
                 :host([data-theme="dark"]) .token.punctuation { color: var(--page-text) !important; }
                 :host([data-theme="dark"]) .token.keyword, :host([data-theme="dark"]) .token.operator { color: #f97583 !important; }
-                :host([data-theme="dark"]) .token.string { color: #9ecbff !important; }
-                :host([data-theme="dark"]) .token.function { color: #b392f0 !important; }
-                :host([data-theme="dark"]) .token.number { color: #79c0ff !important; }
-                :host([data-theme="dark"]) .token.class-name { color: #ffab70 !important; }
+                :host([data-theme="dark"]) .token.string { color: #98c1ef !important; }
+                :host([data-theme="dark"]) .token.function { color: #ad89f0 !important; }
+                :host([data-theme="dark"]) .token.number { color: #71b7f4 !important; }
+                :host([data-theme="dark"]) .token.class-name { color: #fc9d5a !important; }
             </style>
             
             <div class="dev-mode-container">
