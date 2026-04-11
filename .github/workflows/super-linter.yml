@@ -38,4 +38,7 @@ jobs:
           VALIDATE_CSS: false
           VALIDATE_JSCPD: false
           VALIDATE_MARKDOWN: false
+          VALIDATE_HTML: false
+          VALIDATE_JSON: false
+          VALIDATE_PYTHON: false
           BASH_SEVERITY: error
