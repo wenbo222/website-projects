@@ -13,18 +13,58 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: 1.5rem;
+        padding: 2rem;
+        max-width: 37.5rem;
+        margin: 2rem auto;
     }
-    #calc-btn {
-        margin: 1rem auto;
+    .input-group {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    label {
+        margin-left: 0.5rem;
+    }
+    #bill-output {
+        width: 100%;
+        margin-top: 1.5rem;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        background: rgba(74, 144, 226, 0.1);
+        border: 1px solid rgba(74, 144, 226, 0.2);
+        display: none;
+    }
+    .result-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+    .result-total {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-weight: bold;
+        font-size: 1.2rem;
     }
 </style>
 <body>
     <global-header></global-header>
     <h1 id="title">Bill Calculator</h1>
     <main>
-        <input type="number" id="initial-total" placeholder="Enter initial bill amount...">
-        <input type="number" id="tip-percent" placeholder="Enter tip percentage...">
-        <input type="number" id="tax-percent" placeholder="Enter tax percentage...">
+        <div class="input-group">
+            <label for="initial-total">Bill Amount</label>
+            <input type="number" id="initial-total" placeholder="100.00" step="0.01">
+        </div>
+        <div class="input-group">
+            <label for="tip-percent">Tip Percentage (%)</label>
+            <input type="number" id="tip-percent" placeholder="15">
+        </div>
+        <div class="input-group">
+            <label for="tax-percent">Tax Percentage (%)</label>
+            <input type="number" id="tax-percent" placeholder="10">
+        </div>
         <button id="calc-btn" disabled>Calculate Total Bill</button>
         <div id="bill-output"></div>
     </main>
@@ -39,9 +79,24 @@
 
     /**
      * Calculate and display the total bill amount.
-    */
+     * Logic: Total = Subtotal+(Subtotal*Tip%)+(Subtotal*Tax%)
+     */
     function calcBill() {
-        billOutput.textContent = `Your total bill is \$${(initialTotalInput.value*(1+tipPercentInput.value/100)*(1+taxPercentInput.value/100)).toFixed(2)}.`;
+        const subtotal = parseFloat(initialTotalInput.value) || 0;
+        const tipRate = parseFloat(tipPercentInput.value) || 0;
+        const taxRate = parseFloat(taxPercentInput.value) || 0;
+
+        const tipAmount = subtotal*(tipRate/100);
+        const taxAmount = subtotal*(taxRate/100);
+        const total = subtotal+tipAmount+taxAmount;
+
+        billOutput.style.display = 'block';
+        billOutput.innerHTML = `
+            <div class="result-row"><span>Subtotal:</span> <span>$${subtotal.toFixed(2)}</span></div>
+            <div class="result-row"><span>Tip (${tipRate}%):</span> <span>$${tipAmount.toFixed(2)}</span></div>
+            <div class="result-row"><span>Tax (${taxRate}%):</span> <span>$${taxAmount.toFixed(2)}</span></div>
+            <div class="result-total result-row"><span>Total Bill:</span> <span>$${total.toFixed(2)}</span></div>
+        `;
     }
 
     const initialTotalInput = document.getElementById("initial-total");
