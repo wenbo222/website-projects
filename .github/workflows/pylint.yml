@@ -1,6 +1,7 @@
 # Not part of this project, but used for CI
 name: Pylint
-
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # suppress Node 20 deprecation warnings
 on: [push]
 
 jobs:
