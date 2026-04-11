@@ -227,7 +227,7 @@ markdownInput.addEventListener("input", () => {
 // Handeling copy button
 const copyButton = document.getElementById("copy-button");
 markdownInput.addEventListener("input", () => {
-    copyButton.disabled = (htmlOutput.textContent.trim() === "");
+    copyButton.disabled = (htmlOutput.textContent.trim()==="");
 })
 copyButton.addEventListener("click", () => {
     navigator.clipboard.writeText(htmlOutput.textContent);
@@ -235,6 +235,6 @@ copyButton.addEventListener("click", () => {
     copyButton.disabled = true;
     setTimeout(() => {
         copyButton.textContent = "Copy HTML to Clipboard";
-        copyButton.disabled = (htmlOutput.textContent.trim() === "");
+        copyButton.disabled = (htmlOutput.textContent.trim()==="");
     }, 1000);
 })

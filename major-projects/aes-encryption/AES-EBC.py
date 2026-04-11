@@ -240,6 +240,7 @@ def get_blocks(text, flag):
         temp3=[]
         temp4=[]
         dif=(i+1)*16-len(text)
+        padding=""
         if dif>0:
             padding=chr(dif)
         for j in range(i*16, (i+1)*16):

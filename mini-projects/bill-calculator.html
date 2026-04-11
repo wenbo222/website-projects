@@ -8,8 +8,51 @@
     <script type="module" src="../components/global-header.js"></script>
     <link rel="stylesheet" href="../global-styles.css">
 </head>
+<style>
+    main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #calc-btn {
+        margin: 1rem auto;
+    }
+</style>
 <body>
     <global-header></global-header>
-
+    <h1 id="title">Bill Calculator</h1>
+    <main>
+        <input type="number" id="initial-total" placeholder="Enter initial bill amount...">
+        <input type="number" id="tip-percent" placeholder="Enter tip percentage...">
+        <input type="number" id="tax-percent" placeholder="Enter tax percentage...">
+        <button id="calc-btn" disabled>Calculate Total Bill</button>
+        <div id="bill-output"></div>
+    </main>
 </body>
+<script>
+    /**
+     * Enable the button when all three inputs are filled.
+    */
+    function toggleButton() {
+        calcBtn.disabled = (initialTotalInput.value==="" || tipPercentInput.value==="" || taxPercentInput.value==="");
+    }
+
+    /**
+     * Calculate and display the total bill amount.
+    */
+    function calcBill() {
+        billOutput.textContent = `Your total bill is \$${(initialTotalInput.value*(1+tipPercentInput.value/100)*(1+taxPercentInput.value/100)).toFixed(2)}.`;
+    }
+
+    const initialTotalInput = document.getElementById("initial-total");
+    const tipPercentInput = document.getElementById("tip-percent");
+    const taxPercentInput = document.getElementById("tax-percent");
+    const calcBtn = document.getElementById("calc-btn");
+    const billOutput = document.getElementById("bill-output");
+
+    initialTotalInput.addEventListener("input", toggleButton);
+    tipPercentInput.addEventListener("input", toggleButton);
+    taxPercentInput.addEventListener("input", toggleButton);
+    calcBtn.addEventListener("click", calcBill);
+</script>
 </html>
