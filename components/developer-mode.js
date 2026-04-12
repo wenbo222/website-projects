@@ -40,8 +40,8 @@ class DeveloperMode extends HTMLElement {
                     text-align: center;
                 }
                 .code-card {
-                    background: var(--container-bg, #f9f9f9);
-                    border: 1px solid var(--border-color, #cccccc);
+                    background: var(--container-bg);
+                    border: 1px solid var(--border-color);
                     border-radius: 0.75rem;
                     overflow: hidden;
                     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -50,7 +50,7 @@ class DeveloperMode extends HTMLElement {
                 .code-header {
                     background: rgba(128, 128, 128, 0.05);
                     padding: 0.75rem 1.25rem;
-                    border-bottom: 1px solid var(--border-color, #cccccc);
+                    border-bottom: 1px solid var(--border-color);
                 }
                 .filename {
                     opacity: 0.6;
@@ -70,21 +70,21 @@ class DeveloperMode extends HTMLElement {
                 }
                 
                 /* Light mode */
-                .token.comment { color: #5f6771 !important; }
+                .token.comment { color: #454c55 !important; }
                 .token.punctuation { color: var(--page-text) !important; }
                 .token.keyword, .token.operator { color: #8e121e !important; }
                 .token.string { color: #042347 !important; }
-                .token.function { color: #6c3bc6 !important; }
-                .token.number { color: #1072b7 !important; }
+                .token.function { color: #541dba !important; }
+                .token.number { color: #0d592e !important; }
                 .token.class-name { color: #82441a !important; }
 
                 /* Dark mode */
-                :host([data-theme="dark"]) .token.comment { color: #8994a1 !important; }
+                :host([data-theme="dark"]) .token.comment { color: #aab1b8 !important; }
                 :host([data-theme="dark"]) .token.punctuation { color: var(--page-text) !important; }
                 :host([data-theme="dark"]) .token.keyword, :host([data-theme="dark"]) .token.operator { color: #f97583 !important; }
                 :host([data-theme="dark"]) .token.string { color: #98c1ef !important; }
-                :host([data-theme="dark"]) .token.function { color: #ad89f0 !important; }
-                :host([data-theme="dark"]) .token.number { color: #71b7f4 !important; }
+                :host([data-theme="dark"]) .token.function { color: #b493f2 !important; }
+                :host([data-theme="dark"]) .token.number { color: #71f49f !important; }
                 :host([data-theme="dark"]) .token.class-name { color: #fc9d5a !important; }
             </style>
             
