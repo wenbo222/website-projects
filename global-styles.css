@@ -9,7 +9,6 @@
     --secondary-color: #f31528;
     --secondary-hover: #7a0811;
     --title-color: #2c3e50;
-    --container-bg: #fafafa;
 }
 :root[data-theme="dark"] {
     --page-bg: #121212;
@@ -21,7 +20,6 @@
     --secondary-color: #f31528;
     --secondary-hover: #940c15;
     --title-color: #90caf9;
-    --container-bg: #202020;
 }
 
 /* General styling */
