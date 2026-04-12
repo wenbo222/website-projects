@@ -74,7 +74,7 @@ class DeveloperMode extends HTMLElement {
                 .token.punctuation { color: #222222 !important; }
                 .token.keyword, .token.operator, .token.tag, .token.attr-name, .token.selector, .token.important { color: #8e121e !important; }
                 .token.string, .token.attr-value, .token.regex, .token.variable { color: #042347 !important; }
-                .token.function, .token.property, .token.atrule { color: #4b0082 !important; }
+                .token.function, .token.property, .token.atrule, .token.builtin { color: #4b0082 !important; }
                 .token.number, .token.boolean { color: #005000 !important; }
                 .token.class-name { color: #5d2d0b !important; }
 
@@ -83,7 +83,7 @@ class DeveloperMode extends HTMLElement {
                 :host([data-theme="dark"]) .token.punctuation { color: #ffffff !important; }
                 :host([data-theme="dark"]) .token.keyword, :host([data-theme="dark"]) .token.operator, :host([data-theme="dark"]) .token.tag, :host([data-theme="dark"]) .token.attr-name, :host([data-theme="dark"]) .token.selector, :host([data-theme="dark"]) .token.important { color: #ffbcbc !important; }
                 :host([data-theme="dark"]) .token.string, :host([data-theme="dark"]) .token.attr-value, :host([data-theme="dark"]) .token.regex, :host([data-theme="dark"]) .token.variable { color: #cce6ff !important; }
-                :host([data-theme="dark"]) .token.function, :host([data-theme="dark"]) .token.property, :host([data-theme="dark"]) .token.atrule { color: #e1d5ff !important; }
+                :host([data-theme="dark"]) .token.function, :host([data-theme="dark"]) .token.property, :host([data-theme="dark"]) .token.atrule, :host([data-theme="dark"]) .token.builtin { color: #e1d5ff !important; }
                 :host([data-theme="dark"]) .token.number, :host([data-theme="dark"]) .token.boolean { color: #b2ffcc !important; }
                 :host([data-theme="dark"]) .token.class-name { color: #ffe0b2 !important; }
             </style>
