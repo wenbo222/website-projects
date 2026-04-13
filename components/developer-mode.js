@@ -1,9 +1,12 @@
 import {ProjectFilesMap} from './project-files-map.js';
 
+let prismLoadingPromise = null;
+
 class DeveloperMode extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: 'open'});
+        this._observer = null;
     }
 
     async connectedCallback() {
@@ -140,8 +143,15 @@ class DeveloperMode extends HTMLElement {
             }
         };
         updateTheme();
-        const observer = new MutationObserver(updateTheme);
-        observer.observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+        this._observer = new MutationObserver(updateTheme);
+        this._observer.observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+    }
+
+    disconnectedCallback() {
+        if (this._observer) {
+            this._observer.disconnect();
+            this._observer = null;
+        }
     }
 
     getLanguage(filename) {
@@ -153,8 +163,10 @@ class DeveloperMode extends HTMLElement {
     }
 
     async loadPrism() {
-        if (window.Prism) return;
-        return new Promise((resolve, reject) => {
+        if (window.Prism) return Promise.resolve();
+        if (prismLoadingPromise) return prismLoadingPromise;
+
+        prismLoadingPromise = new Promise((resolve, reject) => {
             const script = document.createElement('script');
             script.src = 'https://cdn.jsdelivr.net/npm/prismjs@1.30.0/prism.min.js';
             script.addEventListener('load', () => {
@@ -164,9 +176,13 @@ class DeveloperMode extends HTMLElement {
                 pyScript.addEventListener('error', resolve); // Continue even if python fails
                 document.head.appendChild(pyScript);
             });
-            script.addEventListener('error', reject);
+            script.addEventListener('error', (err) => {
+                prismLoadingPromise = null; 
+                reject(err);
+            });
             document.head.appendChild(script);
         });
+        return prismLoadingPromise;
     }
 }
 
