@@ -9,6 +9,10 @@
     --secondary-color: #f31528;
     --secondary-hover: #7a0811;
     --title-color: #2c3e50;
+    --link-color: #0251a6;
+    --link-hover: #014089;
+    --link-visited: #61188f;
+    --link-active: #a31c1c;
 }
 :root[data-theme="dark"] {
     --page-bg: #121212;
@@ -20,6 +24,10 @@
     --secondary-color: #f31528;
     --secondary-hover: #940c15;
     --title-color: #90caf9;
+    --link-color: #89c7f9;
+    --link-hover: #c0def7;
+    --link-visited: #c99ad1;
+    --link-active: #f17d73;
 }
 
 /* General styling */
@@ -31,7 +39,7 @@ body {
     background-color: var(--page-bg);
     color: var(--page-text);
     transition: background-color 0.4s ease, color 0.4s ease;
-    margin: 0;
+    margin: 0 auto;
 }
 #title {
     text-align: center;
@@ -39,6 +47,28 @@ body {
     font-weight: 700;
     color: var(--title-color);
     margin-bottom: 1.5rem;
+}
+a {
+    color: var(--link-color);
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+a:hover {
+    color: var(--link-hover);
+}
+a:visited {
+    color: var(--link-visited);
+}
+a:active {
+    color: var(--link-active);
+}
+p, h2, h3, h4, h5, h6, li, main, section {
+    margin: 0;
+    padding: 0 1rem;
+}
+p {
+    line-height: 1.2;
+    margin-bottom: 0.2rem;
 }
 
 /* Buttons */
@@ -116,4 +146,7 @@ input:focus, textarea:focus {
     border-color: var(--primary-color);
     transform: translateY(-4px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+.project-snippet > h2 {
+    padding: 0.8rem;
 }
