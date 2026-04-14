@@ -1,6 +1,6 @@
 # Sample BFS
 # Demonstration of the BFS algorithm for finding the shortest path between two nodes in a graph.
-# TO_DO: adapt for finding the shortest path between two nodes in a grid with walls.
+# Also supports grids with walls in between.
 # Wenbo
 
 import collections
