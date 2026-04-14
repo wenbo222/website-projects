@@ -37,9 +37,10 @@ def bfs_shortest_path_grid(row, column, walls, start, goal):
             graph[(i,j)]=neighbours
     return bfs_shortest_path_graph(graph, start, goal)
 
+# https://www.geeksforgeeks.org/python/building-an-undirected-graph-and-finding-shortest-path-using-dictionaries-in-python/
 def bfs_shortest_path_graph(graph, start, goal):
     """
-    bfs_shortest_path(dictionary, string, string) -> list
+    bfs_shortest_path(dictionary, string, string) -> list/None
     Finds the shortest path between start and goal nodes using BFS.
     """
 
