@@ -47,33 +47,6 @@ main {
     transform: scale(0.95);
 }
 
-/* Extract image button styling */
-#extract-btn {
-    margin-left: 0.5rem;
-    padding: 0.6rem 1.2rem;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #fff;
-    background: var(--primary-color);
-    border: 1px solid var(--border-color);
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: transform 0.3s, background 0.3s, border-color 0.3s;
-}
-#extract-btn:not(:disabled):hover {
-    background: var(--primary-hover);
-    border-color: var(--primary-hover);
-    transform: scale(1.05);
-}
-#extract-btn:not(:disabled):active {
-    transform: scale(0.95);
-}
-#extract-btn:disabled {
-    background: #999999;
-    border-color: #999999;
-    cursor: not-allowed;
-}
-
 /* Image output styling */
 #image-output {
     margin-top: 2rem;
