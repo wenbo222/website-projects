@@ -81,7 +81,7 @@
      * @param {Date} date - The date to display.
      */
     function updateClock(date) {
-        const timezoneSelect = document.getElementById("timezone-select");
+        const timezoneSelect = document.getElementById('timezone-select');
         const selectedZone = timezoneSelect.value || Intl.DateTimeFormat().resolvedOptions().timeZone;
         
         lastDate = (date instanceof Date) ? date : new Date();
@@ -101,8 +101,8 @@
             hour12: true
         };
         
-        document.getElementById("date").textContent = lastDate.toLocaleDateString(undefined, dateOptions);
-        document.getElementById("time").textContent = lastDate.toLocaleTimeString(undefined, timeOptions);
+        document.getElementById('date').textContent = lastDate.toLocaleDateString(undefined, dateOptions);
+        document.getElementById('time').textContent = lastDate.toLocaleTimeString(undefined, timeOptions);
     }
 
     /**
@@ -116,12 +116,12 @@
     let clockInterval, lastDate = new Date();
     
     // Populate time zones
-    const select = document.getElementById("timezone-select");
+    const select = document.getElementById('timezone-select');
     const zones = Intl.supportedValuesOf('timeZone');
     const currentZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const now = new Date();
     zones.forEach(zone => {
-        const option = document.createElement("option");
+        const option = document.createElement('option');
         option.value = zone;
         let label = zone.replace(/_/g, ' ');
 
@@ -140,9 +140,9 @@
         select.appendChild(option);
     });
 
-    const toggleButton = document.getElementById("toggle-btn");
-    select.addEventListener("change", () => {
-        if (toggleButton.textContent==="Start") {
+    const toggleButton = document.getElementById('toggle-btn');
+    select.addEventListener('change', () => {
+        if (toggleButton.textContent==='Start') {
             updateClock(lastDate);
         } else {
             updateClock();
@@ -150,14 +150,14 @@
     });
     
     startClock();
-    toggleButton.addEventListener("click", () => {
-        if (toggleButton.textContent==="Stop") {
-            toggleButton.textContent = "Start";
-            toggleButton.style.backgroundColor = "var(--primary-color)";
+    toggleButton.addEventListener('click', () => {
+        if (toggleButton.textContent==='Stop') {
+            toggleButton.textContent = 'Start';
+            toggleButton.style.backgroundColor = 'var(--primary-color)';
             clearInterval(clockInterval);
         } else {
-            toggleButton.textContent = "Stop";
-            toggleButton.style.backgroundColor = "var(--secondary-color)";
+            toggleButton.textContent = 'Stop';
+            toggleButton.style.backgroundColor = 'var(--secondary-color)';
             startClock();
         }
     });

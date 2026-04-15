@@ -74,7 +74,7 @@
      * Enable the button when all three inputs are filled.
     */
     function toggleButton() {
-        calcBtn.disabled = (initialTotalInput.value==="" || tipPercentInput.value==="" || taxPercentInput.value==="");
+        calcBtn.disabled = (initialTotalInput.value==='' || tipPercentInput.value==='' || taxPercentInput.value==='');
     }
 
     /**
@@ -99,15 +99,15 @@
         `;
     }
 
-    const initialTotalInput = document.getElementById("initial-total");
-    const tipPercentInput = document.getElementById("tip-percent");
-    const taxPercentInput = document.getElementById("tax-percent");
-    const calcBtn = document.getElementById("calc-btn");
-    const billOutput = document.getElementById("bill-output");
+    const initialTotalInput = document.getElementById('initial-total');
+    const tipPercentInput = document.getElementById('tip-percent');
+    const taxPercentInput = document.getElementById('tax-percent');
+    const calcBtn = document.getElementById('calc-btn');
+    const billOutput = document.getElementById('bill-output');
 
-    initialTotalInput.addEventListener("input", toggleButton);
-    tipPercentInput.addEventListener("input", toggleButton);
-    taxPercentInput.addEventListener("input", toggleButton);
-    calcBtn.addEventListener("click", calcBill);
+    initialTotalInput.addEventListener('input', toggleButton);
+    tipPercentInput.addEventListener('input', toggleButton);
+    taxPercentInput.addEventListener('input', toggleButton);
+    calcBtn.addEventListener('click', calcBill);
 </script>
 </html>

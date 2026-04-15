@@ -89,28 +89,28 @@
     </main>
 </body>
 <script>
-    const textInput = document.getElementById("text-input");
-    const checkBtn = document.getElementById("check-btn");
-    const result = document.getElementById("result");
-    const caseInsensitive = document.getElementById("case-insensitive");
-    const ignoreSpaces = document.getElementById("ignore-spaces");
-    const ignorePunctuation = document.getElementById("ignore-punctuation");
+    const textInput = document.getElementById('text-input');
+    const checkBtn = document.getElementById('check-btn');
+    const result = document.getElementById('result');
+    const caseInsensitive = document.getElementById('case-insensitive');
+    const ignoreSpaces = document.getElementById('ignore-spaces');
+    const ignorePunctuation = document.getElementById('ignore-punctuation');
 
-    checkBtn.addEventListener("click", () => {
+    checkBtn.addEventListener('click', () => {
         let text = textInput.value;
         if (caseInsensitive.checked) {
             text = text.toLowerCase();
         }
         if (ignoreSpaces.checked) {
-            text = text.replace(/\s/g, "");
+            text = text.replace(/\s/g, '');
         }
         if (ignorePunctuation.checked) {
-            text = text.replace(/[^a-zA-Z0-9]/g, "");
+            text = text.replace(/[^a-zA-Z0-9]/g, '');
         }
-        if (text===text.split("").reverse().join("")) {
-            result.textContent = `It is a palindrome!`;
+        if (text===text.split('').reverse().join('')) {
+            result.textContent = 'It is a palindrome!';
         } else {
-            result.textContent = `It is not a palindrome.`;
+            result.textContent = 'It is not a palindrome.';
         }
     });
 </script>

@@ -213,28 +213,28 @@ function convertMarkdown(markdownText, globalRefs = null) {
 
 // Handeling user input
 /** @type {HTMLTextAreaElement} */
-const markdownInput = document.getElementById("markdown-input");
+const markdownInput = document.getElementById('markdown-input');
 /** @type {HTMLDivElement} */
-const htmlOutput = document.getElementById("html-output");
+const htmlOutput = document.getElementById('html-output');
 /** @type {HTMLDivElement} */
-const htmlPreview = document.getElementById("preview");
-markdownInput.addEventListener("input", () => {
+const htmlPreview = document.getElementById('preview');
+markdownInput.addEventListener('input', () => {
     const htmlConverted = convertMarkdown(markdownInput.value);
     htmlOutput.textContent = htmlConverted;
     htmlPreview.innerHTML = htmlConverted;
 })
 
 // Handeling copy button
-const copyButton = document.getElementById("copy-button");
-markdownInput.addEventListener("input", () => {
-    copyButton.disabled = (htmlOutput.textContent.trim()==="");
+const copyButton = document.getElementById('copy-button');
+markdownInput.addEventListener('input', () => {
+    copyButton.disabled = (htmlOutput.textContent.trim()==='');
 })
-copyButton.addEventListener("click", () => {
+copyButton.addEventListener('click', () => {
     navigator.clipboard.writeText(htmlOutput.textContent);
-    copyButton.textContent = "Copied!";
+    copyButton.textContent = 'Copied!';
     copyButton.disabled = true;
     setTimeout(() => {
-        copyButton.textContent = "Copy HTML to Clipboard";
-        copyButton.disabled = (htmlOutput.textContent.trim()==="");
+        copyButton.textContent = 'Copy HTML to Clipboard';
+        copyButton.disabled = (htmlOutput.textContent.trim()==='');
     }, 1000);
 })

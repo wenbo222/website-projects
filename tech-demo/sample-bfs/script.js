@@ -18,11 +18,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Obtain Python output
     const outputElement = document.getElementById('code-output');
-    outputElement.textContent = "";
+    outputElement.textContent = '';
     let pyodide = await loadPyodide({
-        indexURL: "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/",
+        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.29.3/full/',
         stdout: (text) => {
-            outputElement.textContent += text + "\n"; // += to prevent overwrite
+            outputElement.textContent += text+'\n'; // += to prevent overwrite
         }
     });
     await pyodide.runPythonAsync(content);
