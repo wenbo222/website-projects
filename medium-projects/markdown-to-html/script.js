@@ -175,7 +175,7 @@ function convertMarkdown(markdownText, globalRefs = null) {
 
     lines.forEach(line => {
         let trimmed = line.trim();
-        if (trimmed.length === 0) {
+        if (trimmed.length===0) {
             formatted.push(inPre ? line : '');
             return;
         }

@@ -174,7 +174,7 @@ class DeveloperMode extends HTMLElement {
 
     addLineNumbers(codeEl) {
         const lines = codeEl.innerHTML.split('\n');
-        if (lines.length&&lines[lines.length-1]==='') lines.pop(); // Prevent extra empty line
+        if (lines.length && lines[lines.length-1]==='') lines.pop(); // Prevent extra empty line
         codeEl.innerHTML = lines.map(line => `<span class="code-line">${line}</span>`).join('');
     }
 
