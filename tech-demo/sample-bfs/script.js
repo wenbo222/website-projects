@@ -1,3 +1,9 @@
+function addLineNumbers(codeEl) {
+    const lines = codeEl.innerHTML.split('\n');
+    if (lines.length&&lines[lines.length-1]==='') lines.pop(); // Prevent extra empty line
+    codeEl.innerHTML = lines.map(line => `<span class="code-line">${line}</span>`).join('');
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     // Display Python code
     const codeElement = document.getElementById('python-code');
@@ -7,6 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const content = await response.text();
     codeElement.textContent = content;
     Prism.highlightElement(codeElement);
+    addLineNumbers(codeElement);
     filenameElement.textContent = filePath;
 
     // Obtain Python output
