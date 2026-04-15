@@ -16,10 +16,7 @@ main {
     display: inline-block;
     padding: 0.6rem 1rem;
     border: 2px solid var(--border-color);
-    border-radius: 0.5rem;
     background: rgba(255, 255, 255, 0.08);
-    color: var(--page-text);
-    font-size: 1rem;
     cursor: pointer;
     transition: border 0.3s, background 0.3s;
 }
