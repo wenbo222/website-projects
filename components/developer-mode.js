@@ -24,7 +24,7 @@ class DeveloperMode extends HTMLElement {
         const files = ProjectFilesMap[matchKey];
         let html = `
             <style>
-                @import url('https://cdn.jsdelivr.net/npm/prismjs@1.30.0/themes/prism-tomorrow.min.css');
+                @import url("https://cdn.jsdelivr.net/npm/prismjs@1.30.0/themes/prism-tomorrow.min.css");
                 
                 :host {
                     display: block;
