@@ -2,7 +2,6 @@
 main {
     max-width: 50rem;
     margin: 2rem auto;
-    padding: 0 1rem;
     text-align: center;
 }
 .error-message {
@@ -62,7 +61,6 @@ main {
     max-height: 25rem;
     border-radius: 0.5rem;
     box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.4);
-    transition: opacity 0.3s;
 }
 @keyframes fadeIn {
     from { opacity: 0; }
