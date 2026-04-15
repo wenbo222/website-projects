@@ -66,6 +66,23 @@ class DeveloperMode extends HTMLElement {
                     padding: 1.25rem !important;
                     background: transparent !important;
                     font-size: 0.95rem !important;
+                    counter-reset: line-number;
+                }
+                .code-line {
+                    display: block;
+                    counter-increment: line-number;
+                }
+                .code-line::before {
+                    content: counter(line-number);
+                    display: inline-block;
+                    width: 2.5rem;
+                    margin-right: 1rem;
+                    padding-right: 0.75rem;
+                    text-align: right;
+                    border-right: 1px solid var(--page-text);
+                    color: var(--page-text);
+                    font-size: 0.85rem;
+                    flex-shrink: 0;
                 }
                 code[class*="language-"] {
                     text-shadow: none !important;
@@ -123,6 +140,7 @@ class DeveloperMode extends HTMLElement {
                     if (window.Prism) {
                         window.Prism.highlightElement(codeEl);
                     }
+                    this.addLineNumbers(codeEl);
                 } else {
                     codeEl.textContent = `Error loading ${file}: ${response.statusText}`;
                 }
@@ -152,6 +170,12 @@ class DeveloperMode extends HTMLElement {
             this._observer.disconnect();
             this._observer = null;
         }
+    }
+
+    addLineNumbers(codeEl) {
+        const lines = codeEl.innerHTML.split('\n');
+        if (lines.length&&lines[lines.length-1]==='') lines.pop(); // Prevent extra empty line
+        codeEl.innerHTML = lines.map(line => `<span class="code-line">${line}</span>`).join('');
     }
 
     getLanguage(filename) {
