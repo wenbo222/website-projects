@@ -147,6 +147,16 @@ input:focus, textarea:focus {
     transform: translateY(-4px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
-.project-snippet > h2 {
-    padding: 0.8rem;
+
+/* SVG diagram styling */
+svg.diagram {
+    display: block;
+    margin: 0.5rem auto 1.5rem;
+    max-width: 100%;
+}
+svg.diagram text {
+    font-family: inherit;
+    font-size: 1.2rem;
+    font-weight: 500;
+    fill: currentColor;
 }

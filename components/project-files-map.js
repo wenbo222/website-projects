@@ -64,7 +64,9 @@ export const ProjectFilesMap = {
         "script.js"
     ],
     "/tech-demo/informal-report/index.html": [
-        "index.html"
+        "index.html",
+        "styles.css",
+        "script.js"
     ],
     "/tech-demo/sample-bfs/index.html": [
         "index.html",

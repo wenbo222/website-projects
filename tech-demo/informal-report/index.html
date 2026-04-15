@@ -7,9 +7,270 @@
     <title>Informal Report</title>
     <script type="module" src="../../components/global-header.js"></script>
     <link rel="stylesheet" href="../../global-styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <global-header></global-header>
     <h1 id="title">Informal Report</h1>
+    <button id="toggle-version">Switch to Less Detailed Version</button>
+    <div id="detailed-version">
+        <h2>Summary of Research</h2>
+        <p>To learn the knowledge necessary to build the tech demo, I researched and learned from the following sources:</p>
+        <ul>
+            <li><a href="https://www.freecodecamp.org/learn/responsive-web-design-v9/">freeCodeCamp HTML/CSS Tutorial</a>: I initially used this site to learn the basics of HTML and CSS.</li>
+            <li><a href="https://www.freecodecamp.org/learn/javascript-v9/">freeCodeCamp JavaScript Tutorial</a>: I used this website to learn the basics of JavaScript.</li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">MDN HTML Documentation</a>: I read this documentation for almost every HTML element and attribute used except the extremely common ones.</li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">MDN CSS Documentation</a>: I read this documentation for almost every CSS selector and property used except the extremely common ones.</li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">MDN JavaScript Documentation</a>: I read this documentation for almost every JavaScript method, object, class, and expression used except the extremely common ones.</li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/API">MDN Web API Documentation</a>: I read this for all the web APIs that I have utilized, such as <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window">DOM API</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">Canvas API</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileReader">FileReader API</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API">Web Storage API</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver">Mutation Observer API</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components">Web Components API</a>, and <a href="https://developer.mozilla.org/en-US/docs/Web/API/URL">URL API</a>.</li>
+            <li><a href="https://www.jsdelivr.com/">JS Deliver</a>: I used this to interact with external APIs, including <a href="https://www.jsdelivr.com/package/npm/prismjs">PrismJS</a> and <a href="https://www.jsdelivr.com/package/npm/pyodide">Pyodide</a>.</li>
+            <li><a href="https://jsdoc.app/">JSDoc</a>: I learned how to write JavaScript function documentation with this resource.</li>
+            <li><a href="https://learn.microsoft.com/en-us/">Microsoft Learn</a>: I used this to learn more about the basics of GitHub and Git.</li>
+            <li><a href="https://learn.github.com/skills">GitHub Skills</a>: I utilized this to learn more about how GitHub works.</li>
+            <li><a href="https://docs.github.com/en">GitHub Documentation</a>: I used this to learn more about how GitHub repos work, including commits, branches, pull requests, merges, actions (for CI), pages (for CD), forks, clones, security, GPG keys....</li>
+            <li><a href="https://render.com/docs">Render Documentation</a>: I used this to help me deploy this repository onto Render with the link <a href="https://website-projects-2u95.onrender.com">https://website-projects-2u95.onrender.com</a>. This uses the continuous deployment (CD) strategy to automatically deploy new commits to the main branch of the GitHub repository.</li>
+            <li><a href="https://webaim.org/resources/contrastchecker/">Contrast Checker</a>: I used this to ensure that the vast majority of content on my site follows WCAG AAA contrast guidelines.</li>
+            <li><a href="https://www.geeksforgeeks.org/python/building-an-undirected-graph-and-finding-shortest-path-using-dictionaries-in-python/">BFS Algorithm</a>: I used this to see how the BFS algorithm works.</li>
+        </ul>
+        <h2>Structure of Tech Demo</h2>
+        <p>The tech demo involves sample-bfs code for both undirected graphs and rectangular grids with walls in between the cells: </p>
+        <svg viewBox="0 0 420 260" width="420" height="260" class="diagram">
+            <!-- Edges -->
+            <line x1="70" y1="130" x2="190" y2="50" stroke="currentColor" stroke-width="2"/>
+            <line x1="70" y1="130" x2="190" y2="210" stroke="currentColor" stroke-width="2"/>
+            <line x1="190" y1="50" x2="310" y2="50" stroke="currentColor" stroke-width="2"/>
+            <line x1="190" y1="50" x2="310" y2="130" stroke="currentColor" stroke-width="2"/>
+            <line x1="190" y1="210" x2="350" y2="210" stroke="currentColor" stroke-width="2"/>
+            <line x1="310" y1="130" x2="350" y2="210" stroke="currentColor" stroke-width="2"/>
+            <!-- Nodes -->
+            <circle cx="70" cy="130" r="22" fill="var(--container-bg)" stroke="currentColor" stroke-width="2.5"/>
+            <text x="70" y="136" text-anchor="middle">A</text>
+            <circle cx="190" cy="50" r="22" fill="var(--container-bg)" stroke="currentColor" stroke-width="2.5"/>
+            <text x="190" y="56" text-anchor="middle">B</text>
+            <circle cx="190" cy="210" r="22" fill="var(--container-bg)" stroke="currentColor" stroke-width="2.5"/>
+            <text x="190" y="216" text-anchor="middle">C</text>
+            <circle cx="310" cy="50" r="22" fill="var(--container-bg)" stroke="currentColor" stroke-width="2.5"/>
+            <text x="310" y="56" text-anchor="middle">D</text>
+            <circle cx="310" cy="130" r="22" fill="var(--container-bg)" stroke="currentColor" stroke-width="2.5"/>
+            <text x="310" y="136" text-anchor="middle">E</text>
+            <circle cx="350" cy="210" r="22" fill="var(--container-bg)" stroke="currentColor" stroke-width="2.5"/>
+            <text x="350" y="216" text-anchor="middle">F</text>
+        </svg>
+        <svg viewBox="0 0 340 355" width="340" height="355" class="diagram">
+            <!-- Grid lines -->
+            <rect x="20" y="20" width="300" height="300" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="95" y1="20" x2="95" y2="320" stroke="currentColor" stroke-width="1" stroke-dasharray="6 7"/>
+            <line x1="170" y1="20" x2="170" y2="320" stroke="currentColor" stroke-width="1" stroke-dasharray="6 7"/>
+            <line x1="245" y1="20" x2="245" y2="320" stroke="currentColor" stroke-width="1" stroke-dasharray="6 7"/>
+            <line x1="20" y1="95" x2="320" y2="95" stroke="currentColor" stroke-width="1" stroke-dasharray="6 7"/>
+            <line x1="20" y1="170" x2="320" y2="170" stroke="currentColor" stroke-width="1" stroke-dasharray="6 7"/>
+            <line x1="20" y1="245" x2="320" y2="245" stroke="currentColor" stroke-width="1" stroke-dasharray="6 7"/>
+            <!-- Walls -->
+            <line x1="170" y1="95" x2="170" y2="170" stroke="var(--secondary-color)" stroke-width="5" stroke-linecap="round"/>
+            <line x1="170" y1="170" x2="170" y2="245" stroke="var(--secondary-color)" stroke-width="5" stroke-linecap="round"/>
+            <line x1="170" y1="245" x2="170" y2="320" stroke="var(--secondary-color)" stroke-width="5" stroke-linecap="round"/>
+            <!-- Coordinate labels -->
+            <text x="57" y="63" text-anchor="middle">(0,0)</text>
+            <text x="132" y="63" text-anchor="middle">(0,1)</text>
+            <text x="207" y="63" text-anchor="middle">(0,2)</text>
+            <text x="282" y="63" text-anchor="middle">(0,3)</text>
+            <text x="57" y="138" text-anchor="middle">(1,0)</text>
+            <text x="132" y="138" text-anchor="middle">(1,1)</text>
+            <text x="207" y="138" text-anchor="middle">(1,2)</text>
+            <text x="282" y="138" text-anchor="middle">(1,3)</text>
+            <text x="57" y="213" text-anchor="middle">(2,0)</text>
+            <text x="132" y="213" text-anchor="middle">(2,1)</text>
+            <text x="207" y="213" text-anchor="middle">(2,2)</text>
+            <text x="282" y="213" text-anchor="middle">(2,3)</text>
+            <text x="57" y="288" text-anchor="middle">(3,0)</text>
+            <text x="132" y="288" text-anchor="middle">(3,1)</text>
+            <text x="207" y="288" text-anchor="middle">(3,2)</text>
+            <text x="282" y="288" text-anchor="middle">(3,3)</text>
+        </svg>
+        <ul>
+            <li><a href="https://github.com/wenbo222/website-projects/blob/6491cb02afe3ed9419eecdbedbaa485b6427a078/tech-demo/sample-bfs/sample-bfs.py">sample-bfs.py</a>: This is the main file demonstrating the BFS algorithm. 
+                <ul>
+                    <li>Lines 1-20: Comments, importing modules for the usage of deques, and a sample adjacency list representing undirected graphs and walls with frozensets since a wall blocks motion from one grid to another, and vice versa.</li>
+                    <li>Lines 21-39: Converts a grid with walls to an adjacency list by iterating through all cells and finding all reachable neighbours.</li>
+                    <li>Lines 40-66: The actual standard BFS algorithm on the adjacency list. It uses rare Python objects like sets to check whether a node was already explored in O(1) time and deques to remove and return the first element of a linear collection. The main steps of the algorithm are as follows:
+                        <ol>
+                            <li>Remove and return the first list of the queue.</li>
+                            <li>If the last node of the list was explored before, start a new loop (i.e., equivalent of the keyword "continue").</li>
+                            <li>For each neighbour of the last node, add it to the last node to form a new list that gets added to the queue.</li>
+                            <li>If the neighbour is the target node, return the new path immediately.</li>
+                            <li>Add the last node to the explored set. </li>
+                            <li>Repeat steps 1 to 5 until the queue is empty. If so, return None to indicate that it is impossible to reach the target node.</li>
+                        </ol>
+                    </li>
+                    <li>Lines 67-84: Verifies the validity of the algorithms by testing them on sample graphs and grids.</li>
+                </ul>
+            </li>
+        </ul>
+        <p>The tech demo also involves the image extractor that takes the user's uploaded image and displays it onto the web page with the additional steps of extracting byte arrays and reconstructing the image from them.</p>
+        <ul>
+            <li><a href="https://github.com/wenbo222/website-projects/blob/6491cb02afe3ed9419eecdbedbaa485b6427a078/tech-demo/image-extractor/index.html">index.html</a>: This is the landing page for the image extractor that utilizes many other scripts and stylesheets to present a functioning page.
+                <ul>
+                    <li>Lines 1-17: Comments and standard HTML template for all .html pages in this repository to link global scripts and stylesheets.</li>
+                    <li>Lines 18-26: Contains a title, image input, button to extract image (initially disabled to switch on later with script.js), and a div element for future image output.</li>
+                </ul>
+            </li>
+            <li><a href="https://github.com/wenbo222/website-projects/blob/6491cb02afe3ed9419eecdbedbaa485b6427a078/tech-demo/image-extractor/styles.css">styles.css</a>: This styles the web page.
+                <ul>
+                    <li>Lines 1-12: Styling of the main container to prevent elements from stretching to awkward levels and center everything. It also provides styling for the error message with a red colour and slightly bolded font.</li>
+                    <li>Lines 13-25: Styling of the image input container. Several properties have been overridden compared to the global-styles.css to create shorter vertical padding, semi-transparent background colour, etc.</li>
+                    <li>Lines 26-45: Uses pseudo-elements to select the "Choose File" button. Since the global CSS does not account for this kind of pseudo-buttons, I have to apply a few properties to make the button look modern, including a lighter background due to the two semi-transparent backgrounds combining in opacity, smooth transitions, transformations when hovered over or active, and many others.</li>
+                    <li>Lines 46-58: Styles the image output placeholder as a centred flexbox with semi-transparent grey background, standard round border styling, top margin, and padding all around.</li>
+                    <li>Lines 59-64: Styling for images inside the image output placeholder, notably the restricted width or height and the depth effect created by the box-shadow property.</li>
+                    <li>Lines 65-72: Adds custom fadeIn animation when an image first appears.</li>
+                    <li>Lines 73-76: Responsive design that shrinks the top/down margin slightly when the viewport width is low.</li>
+                </ul>
+            </li>
+            <li><a href="https://github.com/wenbo222/website-projects/blob/6491cb02afe3ed9419eecdbedbaa485b6427a078/tech-demo/image-extractor/script.js">script.js</a>: This script handles the interactions with the user with several event listeners.
+                <ul>
+                    <li>Lines 1-15: Enables the "Extract Image" button only when the uploaded file type is an image; otherwise, displays an error message.</li>
+                    <li>Lines 16-30: Obtains image bytearray through FileReader and Canvas API.</li>
+                    <li>Lines 31-55: Reconstructs canvas and then the original image from the byte array, and adds a small message commenting on how many raw bytes there are.</li>
+                    <li>Lines 56-58: Note the combination of event listeners monitoring "load" and then data reading. This is to only start the next steps after the loading is completely done.</li>
+                    <li>Lines 59-63: Catches a fun edge case that should not happen at all due to how the button is controlled in lines 5-14.</li>
+                </ul>
+            </li>
+        </ul>
+        <h2>Structure of Supplementary Code</h2>
+        <p>Files involved in this section are technically not part of the tech demo. However, since they affect the tech demo web pages, I have provided basic overviews of these scripts and styles. Note that these links below are permalinks at the end of April 13th, 2026, so the code may not represent the code in the current repository.</p>
+        <p>The tech demo uses the components folder below that contains JavaScript code used on every page of the website to reduce code redundancy:</p>
+        <ul>
+            <li><a href="https://github.com/wenbo222/website-projects/blob/6491cb02afe3ed9419eecdbedbaa485b6427a078/components/developer-mode.js">developer-mode.js</a>: Defines the developer-mode HTML element. When the developer mode is enabled, users can directly view the source code of the web page below its normal content with highlighting satisfying WCAG AAA standards.</li>
+            <li><a href="https://github.com/wenbo222/website-projects/blob/6491cb02afe3ed9419eecdbedbaa485b6427a078/components/project-files-map.js">project-files-map.js</a>: This contains a JavaScript object (very similar to Python dictionaries) that maps the web page location to the files that need to be displayed in developer mode.</li>
+            <li><a href="https://github.com/wenbo222/website-projects/blob/6491cb02afe3ed9419eecdbedbaa485b6427a078/components/global-header.js">global-header.js</a>: This is the HTML element present on all web pages because it shows the global heading for users to navigate around the site. It also utilizes the developer-mode.js file to conditionally show developer mode depending on user choice.</li>
+            <li><a href="https://github.com/wenbo222/website-projects/blob/6491cb02afe3ed9419eecdbedbaa485b6427a078/components/theme-loader.js">theme-loader.js</a>: To prevent flashing when switching between pages, this script is present at the very beginning of all HTML elements to apply the correct light or dark mode depending on user choice. </li>
+        </ul>
+        <p>The tech demo also utilizes the <a href="https://github.com/wenbo222/website-projects/blob/6491cb02afe3ed9419eecdbedbaa485b6427a078/global-styles.css">global-styles.css</a> to group common global stylings together to reduce code redundancy and ensure a consistent experience.</p>
+        <p>Specifically, the sample-bfs page uses the following code to display the Python code and output on the web page:</p>
+        <ul>
+            <li><a href="https://github.com/wenbo222/website-projects/blob/6491cb02afe3ed9419eecdbedbaa485b6427a078/tech-demo/sample-bfs/index.html">index.html</a>: This is the actual landing page of the sample-bfs site. It brings everything together by linking many other elements, stylesheets, and scripts.</li>
+            <li><a href="https://github.com/wenbo222/website-projects/blob/6491cb02afe3ed9419eecdbedbaa485b6427a078/tech-demo/sample-bfs/styles.css">styles.css</a>: This styles the web page to make it look more modern and aesthetically pleasing.</li>
+            <li><a href="https://github.com/wenbo222/website-projects/blob/6491cb02afe3ed9419eecdbedbaa485b6427a078/tech-demo/sample-bfs/script.js">script.js</a>: This dynamically loads the Python code and output onto the website.</li>
+        </ul>
+    </div>
+    <div id="simple-version">
+        <h2>Summary of Research</h2>
+        <p>To learn the knowledge necessary to build the tech demo, I researched and learned from the following sources:</p>
+        <ul>
+            <li><a href="https://www.freecodecamp.org">freeCodeCamp HTML/CSS Tutorial</a>: To learn the basics of HTML, CSS, and JavaScript.</li>
+            <li><a href="https://developer.mozilla.org/en-US/">MDN Web Docs</a>: To read for almost every HTML/CSS/JavaScript used except the extremely common ones and all the web APIs that I have utilized, such as <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window">DOM API</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">Canvas API</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileReader">FileReader API</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API">Web Storage API</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver">Mutation Observer API</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components">Web Components API</a>, and <a href="https://developer.mozilla.org/en-US/docs/Web/API/URL">URL API</a>.</li>
+            <li><a href="https://www.jsdelivr.com/">JS Deliver</a>: To interact with external APIs, including <a href="https://www.jsdelivr.com/package/npm/prismjs">PrismJS</a> and <a href="https://www.jsdelivr.com/package/npm/pyodide">Pyodide</a>.</li>
+            <li><a href="https://jsdoc.app/">JSDoc</a>: To learn how to write JavaScript function documentation with this resource.</li>
+            <li><a href="https://learn.microsoft.com/en-us/">Microsoft Learn</a>: To learn more about the basics of GitHub and Git.</li>
+            <li><a href="https://learn.github.com/skills">GitHub Skills</a>: To learn more about how GitHub works.</li>
+            <li><a href="https://docs.github.com/en">GitHub Documentation</a>: To learn more about how GitHub repos work, including commits, branches, pull requests, merges, actions (for CI), pages (for CD), forks, clones, security, GPG keys....</li>
+            <li><a href="https://render.com/docs">Render Documentation</a>: To help deploy this repository onto Render with the link <a href="https://website-projects-2u95.onrender.com">https://website-projects-2u95.onrender.com</a>. This uses the continuous deployment (CD) strategy to automatically deploy new commits to the main branch of the GitHub repository.</li>
+            <li><a href="https://webaim.org/resources/contrastchecker/">Contrast Checker</a>: To ensure that the vast majority of content on my site follows WCAG AAA contrast guidelines.</li>
+            <li><a href="https://www.geeksforgeeks.org/python/building-an-undirected-graph-and-finding-shortest-path-using-dictionaries-in-python/">BFS Algorithm</a>: To see how the BFS algorithm works.</li>
+        </ul>
+        <h2>Structure of Tech Demo</h2>
+        <p>The tech demo involves sample-bfs code for both undirected graphs and rectangular grids with walls in between the cells: </p>
+        <svg viewBox="0 0 420 260" width="420" height="260" class="diagram">
+            <!-- Edges -->
+            <line x1="70" y1="130" x2="190" y2="50" stroke="currentColor" stroke-width="2"/>
+            <line x1="70" y1="130" x2="190" y2="210" stroke="currentColor" stroke-width="2"/>
+            <line x1="190" y1="50" x2="310" y2="50" stroke="currentColor" stroke-width="2"/>
+            <line x1="190" y1="50" x2="310" y2="130" stroke="currentColor" stroke-width="2"/>
+            <line x1="190" y1="210" x2="350" y2="210" stroke="currentColor" stroke-width="2"/>
+            <line x1="310" y1="130" x2="350" y2="210" stroke="currentColor" stroke-width="2"/>
+            <!-- Nodes -->
+            <circle cx="70" cy="130" r="22" fill="var(--container-bg)" stroke="currentColor" stroke-width="2.5"/>
+            <text x="70" y="136" text-anchor="middle">A</text>
+            <circle cx="190" cy="50" r="22" fill="var(--container-bg)" stroke="currentColor" stroke-width="2.5"/>
+            <text x="190" y="56" text-anchor="middle">B</text>
+            <circle cx="190" cy="210" r="22" fill="var(--container-bg)" stroke="currentColor" stroke-width="2.5"/>
+            <text x="190" y="216" text-anchor="middle">C</text>
+            <circle cx="310" cy="50" r="22" fill="var(--container-bg)" stroke="currentColor" stroke-width="2.5"/>
+            <text x="310" y="56" text-anchor="middle">D</text>
+            <circle cx="310" cy="130" r="22" fill="var(--container-bg)" stroke="currentColor" stroke-width="2.5"/>
+            <text x="310" y="136" text-anchor="middle">E</text>
+            <circle cx="350" cy="210" r="22" fill="var(--container-bg)" stroke="currentColor" stroke-width="2.5"/>
+            <text x="350" y="216" text-anchor="middle">F</text>
+        </svg>
+        <svg viewBox="0 0 340 355" width="340" height="355" class="diagram">
+            <!-- Grid lines -->
+            <rect x="20" y="20" width="300" height="300" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="95" y1="20" x2="95" y2="320" stroke="currentColor" stroke-width="1" stroke-dasharray="6 7"/>
+            <line x1="170" y1="20" x2="170" y2="320" stroke="currentColor" stroke-width="1" stroke-dasharray="6 7"/>
+            <line x1="245" y1="20" x2="245" y2="320" stroke="currentColor" stroke-width="1" stroke-dasharray="6 7"/>
+            <line x1="20" y1="95" x2="320" y2="95" stroke="currentColor" stroke-width="1" stroke-dasharray="6 7"/>
+            <line x1="20" y1="170" x2="320" y2="170" stroke="currentColor" stroke-width="1" stroke-dasharray="6 7"/>
+            <line x1="20" y1="245" x2="320" y2="245" stroke="currentColor" stroke-width="1" stroke-dasharray="6 7"/>
+            <!-- Walls -->
+            <line x1="170" y1="95" x2="170" y2="170" stroke="var(--secondary-color)" stroke-width="5" stroke-linecap="round"/>
+            <line x1="170" y1="170" x2="170" y2="245" stroke="var(--secondary-color)" stroke-width="5" stroke-linecap="round"/>
+            <line x1="170" y1="245" x2="170" y2="320" stroke="var(--secondary-color)" stroke-width="5" stroke-linecap="round"/>
+            <!-- Coordinate labels -->
+            <text x="57" y="63" text-anchor="middle">(0,0)</text>
+            <text x="132" y="63" text-anchor="middle">(0,1)</text>
+            <text x="207" y="63" text-anchor="middle">(0,2)</text>
+            <text x="282" y="63" text-anchor="middle">(0,3)</text>
+            <text x="57" y="138" text-anchor="middle">(1,0)</text>
+            <text x="132" y="138" text-anchor="middle">(1,1)</text>
+            <text x="207" y="138" text-anchor="middle">(1,2)</text>
+            <text x="282" y="138" text-anchor="middle">(1,3)</text>
+            <text x="57" y="213" text-anchor="middle">(2,0)</text>
+            <text x="132" y="213" text-anchor="middle">(2,1)</text>
+            <text x="207" y="213" text-anchor="middle">(2,2)</text>
+            <text x="282" y="213" text-anchor="middle">(2,3)</text>
+            <text x="57" y="288" text-anchor="middle">(3,0)</text>
+            <text x="132" y="288" text-anchor="middle">(3,1)</text>
+            <text x="207" y="288" text-anchor="middle">(3,2)</text>
+            <text x="282" y="288" text-anchor="middle">(3,3)</text>
+        </svg>
+        <ul>
+            <li><a href="https://github.com/wenbo222/website-projects/blob/6491cb02afe3ed9419eecdbedbaa485b6427a078/tech-demo/sample-bfs/sample-bfs.py">sample-bfs.py</a>: Main BFS algorithm demonstration.
+                <ul>
+                    <li>Lines 1-20: Imports and graph representation using frozensets for walls.</li>
+                    <li>Lines 21-39: Converts grid systems into adjacency lists by looking at each cell and checking its neighbors.</li>
+                    <li>Lines 40-66: Standard BFS implementation using sets for O(1) lookups and deques for O(1) popleft. The key steps:
+                        <ol>
+                            <li>Dequeue the next path. The node of interest is the last one of the path.</li>
+                            <li>Skip if node was already explored.</li>
+                            <li>Append neighbors to create new paths and enqueue them.</li>
+                            <li>Return path if target is reached.</li>
+                            <li>Mark node as explored.</li>
+                            <li>Repeat until empty; return None if unreachable.</li>
+                        </ol>
+                    </li>
+                    <li>Lines 67-84: Test cases for algorithm verification.</li>
+                </ul>
+            </li>
+        </ul>
+        <p>The image extractor processes uploads by converting images to byte arrays and reconstructing them for display.</p>
+        <ul>
+            <li><a href="https://github.com/wenbo222/website-projects/blob/6491cb02afe3ed9419eecdbedbaa485b6427a078/tech-demo/image-extractor/index.html">index.html</a>: Landing page utilizing global stylesheets and scripts.
+                <ul>
+                    <li>Lines 1-17: Standard HTML boilerplate and asset linking.</li>
+                    <li>Lines 18-26: Title, input, extraction button, and output container.</li>
+                </ul>
+            </li>
+            <li><a href="https://github.com/wenbo222/website-projects/blob/6491cb02afe3ed9419eecdbedbaa485b6427a078/tech-demo/image-extractor/styles.css">styles.css</a>: Page-specific styling.
+                <ul>
+                    <li>Lines 1-12: Main container center alignment and error message formatting.</li>
+                    <li>Lines 13-25: Overrides for input container padding and backgrounds.</li>
+                    <li>Lines 26-45: Custom pseudo-element styling for modern "Choose File" buttons with transitions.</li>
+                    <li>Lines 46-58: Centered flexbox placeholder for image results.</li>
+                    <li>Lines 59-64: Image size constraints and box-shadow depth effects.</li>
+                    <li>Lines 65-72: Custom fadeIn animation.</li>
+                    <li>Lines 73-76: Responsive margin adjustments for low viewport width.</li>
+                </ul>
+            </li>
+            <li><a href="https://github.com/wenbo222/website-projects/blob/6491cb02afe3ed9419eecdbedbaa485b6427a078/tech-demo/image-extractor/script.js">script.js</a>: Interaction logic with users.
+                <ul>
+                    <li>Lines 1-15: Toggle button and errors based on image file type validation.</li>
+                    <li>Lines 16-30: Byte extraction via FileReader and Canvas API.</li>
+                    <li>Lines 31-55: Image reconstruction from the byte array and byte count display.</li>
+                    <li>Lines 56-58: Event sequence management for async loading with "load" event listeners and data reading at the end</li>
+                    <li>Lines 59-63: Fun edge case error handling.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
