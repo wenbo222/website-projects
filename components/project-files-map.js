@@ -1,5 +1,5 @@
 export const ProjectFilesMap = {
-    'index.html': [
+    '/index.html': [
         'index.html'
     ],
     '/major-projects/index.html': [
