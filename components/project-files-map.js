@@ -1,7 +1,4 @@
 export const ProjectFilesMap = {
-    '/index.html': [
-        'index.html'
-    ],
     '/major-projects/index.html': [
         'index.html'
     ],
@@ -90,5 +87,8 @@ export const ProjectFilesMap = {
     ],
     '/mini-projects/task-manager.html': [
         'task-manager.html'
+    ],
+    '/index.html': [
+        'index.html'
     ]
 };
