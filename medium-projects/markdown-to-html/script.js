@@ -20,8 +20,9 @@ function convertMarkdown(markdownText, globalRefs = null) {
 
     // Add reference definitions
     if (!globalRefs) {
-        const definitionRegex = /^[ \t]*\[([^\]]+)\]:\s*([^\s<]+)(?:\s+(?:"([^"]*)"|'([^']*)'|\(([^)]*)\)))?\s*$/gm;
-        html = html.replace(definitionRegex, (match, id, url, titleDouble, titleSingle, titleParen) => {
+        const definitionRegex = /^[ \t]*\[(?<id>[^\]]+)\]:\s*(?:<(?<urlBrackets>[^>]+)>|(?<urlNoBrackets>[^\s]+))(?:\s+(?:"(?<titleDouble>[^"]*)"|'(?<titleSingle>[^']*)'|\((?<titleParen>[^)]*)\)))?\s*$/gm;
+        html = html.replace(definitionRegex, (match, id, urlBrackets, urlNoBrackets, titleDouble, titleSingle, titleParen) => {
+            let url = urlBrackets || urlNoBrackets;
             let title = titleDouble || titleSingle || titleParen;
             references[id.toLowerCase()] = {url, title};
             return '';
