@@ -90,6 +90,7 @@ export const ProjectFilesMap = {
     ],
     '/index.html': [
         'index.html',
+        'global-styles.css',
         'components/developer-mode.js',
         'components/global-header.js',
         'components/project-files-map.js',
