@@ -62,7 +62,7 @@ a:visited {
 a:active {
     color: var(--link-active);
 }
-p, h2, h3, h4, h5, h6, li, main, section {
+p, h2, h3, h4, h5, h6, li, main, section, dt, dd {
     padding: 0 1rem;
 }
 p {
