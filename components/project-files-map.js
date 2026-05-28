@@ -89,6 +89,10 @@ export const ProjectFilesMap = {
         'task-manager.html'
     ],
     '/index.html': [
-        'index.html'
+        'index.html',
+        'components/developer-mode.js',
+        'components/global-header.js',
+        'components/project-files-map.js',
+        'components/theme-loader.js'
     ]
 };
