@@ -11,9 +11,18 @@ class DeveloperMode extends HTMLElement {
 
     async connectedCallback() {
         const currentPath = window.location.pathname;
+
+        // Add index.html when missing for proper developer mode
+        let normalizedPath = currentPath;
+        if (normalizedPath.endsWith('/')) {
+            normalizedPath += 'index.html';
+        } else if (!normalizedPath.split('/').pop().includes('.')) {
+            normalizedPath += '/index.html';
+        }
+
         let matchKey = null;
         for (const key of Object.keys(ProjectFilesMap)) {
-            if (currentPath.endsWith(key)) {
+            if (normalizedPath.endsWith(key)) {
                 matchKey = key;
                 break;
             }
@@ -61,32 +70,32 @@ class DeveloperMode extends HTMLElement {
                     color: var(--page-text);
                     font-weight: 600;
                 }
+                .code-body {
+                    display: flex;
+                    background: transparent;
+                }
+                .line-numbers {
+                    padding: 1.25rem 0.75rem;
+                    text-align: right;
+                    border-right: 1px solid var(--border-color);
+                    color: var(--page-text);
+                    opacity: 0.6;
+                    font-family: monospace;
+                    line-height: 1.5;
+                    font-size: 0.95rem;
+                    background: rgba(128, 128, 128, 0.02);
+                }
+                .line-numbers div {
+                    height: 1.5em;
+                }
                 pre[class*="language-"] {
                     margin: 0 !important;
                     padding: 1.25rem !important;
                     background: transparent !important;
                     font-size: 0.95rem !important;
-                    counter-reset: line-number;
-                }
-                .code-line {
-                    display: block;
-                    counter-increment: line-number;
-                }
-                .code-line::before {
-                    content: counter(line-number);
-                    display: inline-block;
-                    width: 2.5rem;
-                    margin-right: 1rem;
-                    padding-right: 0.75rem;
-                    text-align: right;
-                    border-right: 1px solid var(--page-text);
-                    color: var(--page-text);
-                    font-size: 0.85rem;
-                    flex-shrink: 0;
-                }
-                code[class*="language-"] {
-                    text-shadow: none !important;
-                    color: var(--page-text) !important;
+                    line-height: 1.5 !important;
+                    overflow-x: auto;
+                    flex-grow: 1;
                 }
                 
                 /* Light mode */
@@ -119,7 +128,9 @@ class DeveloperMode extends HTMLElement {
                     <div class="code-header">
                         <div class="filename">${file}</div>
                     </div>
-                    <pre><code id="code-${file.replace(/\./g, '-')}" class="language-${this.getLanguage(file)}">Loading...</code></pre>
+                    <div class="code-body">
+                        <pre><code id="code-${file.replace(/\./g, '-')}" class="language-${this.getLanguage(file)}">Loading...</code></pre>
+                    </div>
                 </div>
             `;
         }
@@ -173,9 +184,13 @@ class DeveloperMode extends HTMLElement {
     }
 
     addLineNumbers(codeEl) {
-        const lines = codeEl.innerHTML.split('\n');
-        if (lines.length && lines[lines.length-1]==='') lines.pop(); // Prevent extra empty line
-        codeEl.innerHTML = lines.map(line => `<span class="code-line">${line}</span>`).join('');
+        const lineCount = codeEl.innerHTML.split('\n').length;
+        let numbers = '';
+        for (let i=1; i<=lineCount; i++) {
+            numbers += `<div>${i}</div>`;
+        }
+        const lineNumbersHtml = `<div class="line-numbers">${numbers}</div>`;
+        codeEl.closest('pre').insertAdjacentHTML('beforebegin', lineNumbersHtml);
     }
 
     getLanguage(filename) {
