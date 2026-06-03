@@ -1,5 +1,5 @@
 # Advanced Encryption Standard (AES)
-# Using PCBC method of encryption
+# Consolidated file supporting EBC, CBC, CFB, OFB, and PCBC methods of encryption.
 # Overall Citation: https://medium.com/codex/aes-how-the-most-advanced-encryption-actually-works-b6341c44edb9
 # https://en.wikipedia.org/wiki/Advanced_Encryption_Standard
 # https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf
@@ -7,6 +7,7 @@
 
 import math
 import sys
+import copy
 
 # S-box table
 table=[["63", "7c", "77", "7b", "f2", "6b", "6f", "c5", "30", "01", "67", "2b", "fe", "d7", "ab", "76"],
@@ -148,139 +149,6 @@ def decimal_to_16(n, flag):
     return result
 
 
-def encrypt(text, key, iv, rounds):
-    """
-    encrypt(string, string, string, int) -> string
-
-    Returns the encrypted message.
-    """
-    
-    old_blocks=get_blocks(text, False) # Plaintext
-    new_blocks=get_blocks(text, False) # Ciphertext
-    keys=get_keys(key, rounds)
-    
-    for i in range(len(new_blocks)):
-        # XOR initilization key/previous block
-        if i==0:
-            new_blocks[i]=add_round_key(iv, new_blocks[i])
-        else:
-            new_blocks[i]=add_round_key(new_blocks[i-1], new_blocks[i])
-            new_blocks[i]=add_round_key(new_blocks[i], old_blocks[i-1])
-            
-        # First round (0th round)
-        new_blocks[i]=add_round_key(keys[0], new_blocks[i])
-
-        # Remaining rounds (1th to rounds-2'th rounds)
-        for j in range(1, rounds-1):
-            new_blocks[i]=sub_bytes(new_blocks[i])
-            new_blocks[i]=shift_rows(new_blocks[i])
-            new_blocks[i]=mix_columns(new_blocks[i])                                                                                                                                                                     
-            new_blocks[i]=add_round_key(keys[j], new_blocks[i])
-
-        # Last round (round-1'th round)
-        new_blocks[i]=sub_bytes(new_blocks[i])
-        new_blocks[i]=shift_rows(new_blocks[i])
-        new_blocks[i]=add_round_key(keys[rounds-1], new_blocks[i])
-            
-    ciphertext=reassemble(new_blocks, True)
-    return ciphertext
-
-
-def decrypt(ciphertext, key, iv, rounds):
-    """
-    decrypt(string, string, string, int) -> string
-
-    Returns the decrypted message.
-    """
-    
-    old_blocks=get_blocks(ciphertext, True) # Ciphertext
-    new_blocks=get_blocks(ciphertext, True) # Plaintext
-    keys=get_keys(key, rounds)
-    
-    for i in range(len(new_blocks)):
-        # First round (0th round)
-        new_blocks[i]=add_round_key(keys[rounds-1], new_blocks[i])
-        new_blocks[i]=shift_rows_inv(new_blocks[i])
-        new_blocks[i]=sub_bytes_inv(new_blocks[i])
-
-        # Remaining rounds (1th to rounds-2'th rounds)
-        for j in range(1, rounds-1):
-            new_blocks[i]=add_round_key(keys[rounds-j-1], new_blocks[i])
-            new_blocks[i]=mix_columns_inv(new_blocks[i])
-            new_blocks[i]=shift_rows_inv(new_blocks[i])
-            new_blocks[i]=sub_bytes_inv(new_blocks[i])
-        
-        # Last round (round-1'th round)
-        new_blocks[i]=add_round_key(keys[0], new_blocks[i])
-        
-        # XOR initilization key/previous block
-        if i==0:
-            new_blocks[i]=add_round_key(iv, new_blocks[i])
-        else:
-            new_blocks[i]=add_round_key(new_blocks[i-1], new_blocks[i])
-            new_blocks[i]=add_round_key(new_blocks[i], old_blocks[i-1])
-    
-    text=reassemble(new_blocks, False)
-    return text
-
-
-def get_blocks(text, flag):
-    """
-    get_blocks(string, boolean) -> list
-
-    Returns blocks based on the given text.
-    If the boolean is True, the text is in hexadecimal separated by spaces.
-    """
-
-    # If the input is hexadecimals, change them into normalt text first.
-    if flag==True:
-        letters=text.split()
-        temp=""
-        for letter in letters:
-            temp+=chr(int(letter, base=16))
-        text=temp
-
-    # Calculate the number of iterations
-    blocks=[]
-##    if len(text)%16==0:
-##        iterations=len(text)//16
-##    else:
-##        iterations=len(text)//16+1
-    iterations=len(text)//16+1
-    
-    # Break the text into blocks
-    for i in range(iterations):
-        temp=[]
-        temp1=[]
-        temp2=[]
-        temp3=[]
-        temp4=[]
-        for j in range(i*16, (i+1)*16):
-            character=""
-            if j<len(text):
-                character=text[j]
-            else:
-                # character=" "
-                character=chr(0x10)
-            if j%4==0:
-                temp1.append(decimal_to_16(ord(character), 2))
-            elif j%4==1:
-                temp2.append(decimal_to_16(ord(character), 2))
-            elif j%4==2:
-                temp3.append(decimal_to_16(ord(character), 2))
-            elif j%4==3:
-                temp4.append(decimal_to_16(ord(character), 2))
-
-        # Append the blocks
-        temp.append(temp1)
-        temp.append(temp2)
-        temp.append(temp3)
-        temp.append(temp4)
-        blocks.append(temp)
-    
-    return blocks
-
-        
 def rotate(word):
     """
     rotate(string) -> string
@@ -347,10 +215,6 @@ def get_keys(key, rounds):
 
     keys=[]
     for i in range(rounds):
-##        temp=""
-##        for j in range(4*i, 4*(i+1)):
-##            temp+=w[j]
-##        keys.append(temp)
         temp1=[]
         temp2=[]
         temp3=[]
@@ -377,10 +241,13 @@ def add_round_key(key, block):
     Add the round key (the string) to every hexadecimal in the list in GF(2^8), and return it.
     """
     
+    temp=[]
     for i in range(4):
+        temp1=[]
         for j in range(4):
-            block[i][j]=decimal_to_16(int(block[i][j], base=16)^int(key[i][j], base=16), 2)
-    return block
+            temp1.append(decimal_to_16(int(block[i][j], base=16)^int(key[i][j], base=16), 2))
+        temp.append(temp1)
+    return temp
 
 
 def sub_bytes(block):
@@ -533,69 +400,411 @@ def mix_columns_inv(block):
     return block
 
 
-def reassemble(blocks, flag):
+def get_blocks(text, flag, mode, iv=None):
     """
-    reassemble(list) -> string
+    get_blocks(string, boolean, string, list) -> list
+
+    Returns blocks based on the given text and encryption mode.
+    """
+    if flag==True:
+        letters=text.split()
+        temp=""
+        for letter in letters:
+            temp+=chr(int(letter, base=16))
+        text=temp
+
+    blocks=[]
+    iterations=len(text)//16+1
+    
+    if mode in ["CFB", "OFB"] and iv is not None:
+        blocks.append(iv)
+        
+    for i in range(iterations):
+        temp=[]
+        temp1=[]
+        temp2=[]
+        temp3=[]
+        temp4=[]
+        
+        if mode in ["EBC", "ECB"]:
+            dif=(i+1)*16-len(text)
+            padding=""
+            if dif>0:
+                padding=chr(dif)
+        else:
+            padding=chr(0x10)
+            
+        for j in range(i*16, (i+1)*16):
+            character=""
+            if j<len(text):
+                character=text[j]
+            else:
+                character=padding
+                
+            if j%4==0:
+                temp1.append(decimal_to_16(ord(character), 2))
+            elif j%4==1:
+                temp2.append(decimal_to_16(ord(character), 2))
+            elif j%4==2:
+                temp3.append(decimal_to_16(ord(character), 2))
+            elif j%4==3:
+                temp4.append(decimal_to_16(ord(character), 2))
+
+        temp.append(temp1)
+        temp.append(temp2)
+        temp.append(temp3)
+        temp.append(temp4)
+        blocks.append(temp)
+    
+    return blocks
+
+
+def reassemble(blocks, flag, mode):
+    """
+    reassemble(list, boolean, string) -> string
 
     Change the list into a string.
-    If flag is True, the string will be hexadecimals separated by spaces.
-    Otherwise, the string will be real text.
     """
-    
     text=""
     for block in blocks:
         for j in range(4):
             for i in range(4):
                 if flag:
-                    text+=block[i][j]+" "
+                    if mode in ["EBC", "ECB"]:
+                        text+=block[i][j]
+                    else:
+                        text+=block[i][j]+" "
                 else:
-                    if block[i][j]=="10": # Remove the effect of padding
-                        return text
+                    if mode in ["EBC", "ECB"]:
+                        if block[i][j] in ["01", "02", "03", "04", "05", "06", "07", "08", "09", "0a", "0b", "0c", "0d", "0e", "10"]:
+                            return text
+                    else:
+                        if block[i][j]=="10":
+                            return text
                     text+=chr(int(block[i][j], base=16))
     return text
 
-def process_request(choice, message, rounds, raw_key, raw_iv):
+def rev(flag):
     """
-    process_request(string, string, int, string, string) -> string
+    rev(boolean) -> boolean
+
+    If the boolean is True, returns False. Otherwise, returns True.
+    """
+
+    if flag==True:
+        return False
+    return True
+
+def encrypt_ebc(text, key, rounds):
+    """
+    encrypt_ebc(string, string, int) -> string
+
+    Encrypts message using the EBC/ECB mode of operation.
+    """
+
+    blocks=get_blocks(text, False, "EBC")
+    keys=get_keys(key, rounds)
+    for i in range(len(blocks)):
+        blocks[i]=add_round_key(keys[0], blocks[i])
+        for j in range(1, rounds-1):
+            blocks[i]=sub_bytes(blocks[i])
+            blocks[i]=shift_rows(blocks[i])
+            blocks[i]=mix_columns(blocks[i])
+            blocks[i]=add_round_key(keys[j], blocks[i])
+        blocks[i]=sub_bytes(blocks[i])
+        blocks[i]=shift_rows(blocks[i])
+        blocks[i]=add_round_key(keys[rounds-1], blocks[i])
+    ciphertext=reassemble(blocks, True, "EBC")
+    return ciphertext
+
+
+def decrypt_ebc(ciphertext, key, rounds):
+    """
+    decrypt_ebc(string, string, int) -> string
+
+    Decrypts ciphertext using the EBC/ECB mode of operation.
+    """
+
+    blocks=get_blocks(ciphertext, True, "EBC")
+    keys=get_keys(key, rounds)
+    for i in range(len(blocks)):
+        blocks[i]=add_round_key(keys[rounds-1], blocks[i])
+        blocks[i]=shift_rows_inv(blocks[i])
+        blocks[i]=sub_bytes_inv(blocks[i])
+        for j in range(1, rounds-1):
+            blocks[i]=add_round_key(keys[rounds-j-1], blocks[i])
+            blocks[i]=mix_columns_inv(blocks[i])
+            blocks[i]=shift_rows_inv(blocks[i])
+            blocks[i]=sub_bytes_inv(blocks[i])
+        blocks[i]=add_round_key(keys[0], blocks[i])
+    text=reassemble(blocks, False, "EBC")
+    return text
+
+
+def encrypt_cbc(text, key, iv, rounds):
+    """
+    encrypt_cbc(string, string, list, int) -> string
+
+    Encrypts message using the CBC mode of operation.
+    """
+
+    blocks=get_blocks(text, False, "CBC")
+    keys=get_keys(key, rounds)
+    for i in range(len(blocks)):
+        if i==0:
+            blocks[i]=add_round_key(iv, blocks[i])
+        else:
+            blocks[i]=add_round_key(blocks[i-1], blocks[i])
+        blocks[i]=add_round_key(keys[0], blocks[i])
+        for j in range(1, rounds-1):
+            blocks[i]=sub_bytes(blocks[i])
+            blocks[i]=shift_rows(blocks[i])
+            blocks[i]=mix_columns(blocks[i])
+            blocks[i]=add_round_key(keys[j], blocks[i])
+        blocks[i]=sub_bytes(blocks[i])
+        blocks[i]=shift_rows(blocks[i])
+        blocks[i]=add_round_key(keys[rounds-1], blocks[i])
+    ciphertext=reassemble(blocks, True, "CBC")
+    return ciphertext
+
+
+def decrypt_cbc(ciphertext, key, iv, rounds):
+    """
+    decrypt_cbc(string, string, list, int) -> string
+
+    Decrypts ciphertext using the CBC mode of operation.
+    """
+
+    blocks=get_blocks(ciphertext, True, "CBC")
+    keys=get_keys(key, rounds)
+    for i in range(len(blocks)):
+        blocks[i]=add_round_key(keys[rounds-1], blocks[i])
+        blocks[i]=shift_rows_inv(blocks[i])
+        blocks[i]=sub_bytes_inv(blocks[i])
+        for j in range(1, rounds-1):
+            blocks[i]=add_round_key(keys[rounds-j-1], blocks[i])
+            blocks[i]=mix_columns_inv(blocks[i])
+            blocks[i]=shift_rows_inv(blocks[i])
+            blocks[i]=sub_bytes_inv(blocks[i])
+        blocks[i]=add_round_key(keys[0], blocks[i])
+        if i==0:
+            blocks[i]=add_round_key(iv, blocks[i])
+        else:
+            blocks[i]=add_round_key(blocks[i-1], blocks[i])
+    text=reassemble(blocks, False, "CBC")
+    return text
+
+
+def encrypt_cfb(text, key, iv, rounds):
+    """
+    encrypt_cfb(string, string, list, int) -> string
+
+    Encrypts message using the CFB mode of operation.
+    """
+
+    blocks=get_blocks(text, False, "CFB", iv)
+    new_blocks=get_blocks(text, False, "CFB", iv)
+    keys=get_keys(key, rounds)
+    for i in range(1, len(new_blocks)):
+        new_blocks[i]=add_round_key(keys[0], new_blocks[i-1])
+        for j in range(1, rounds-1):
+            new_blocks[i]=sub_bytes(new_blocks[i])
+            new_blocks[i]=shift_rows(new_blocks[i])
+            new_blocks[i]=mix_columns(new_blocks[i])
+            new_blocks[i]=add_round_key(keys[j], new_blocks[i])
+        new_blocks[i]=sub_bytes(new_blocks[i])
+        new_blocks[i]=shift_rows(new_blocks[i])
+        new_blocks[i]=add_round_key(keys[rounds-1], new_blocks[i])
+        new_blocks[i]=add_round_key(blocks[i], new_blocks[i])
+    ciphertext=reassemble(new_blocks[1:], True, "CFB")
+    return ciphertext
+
+
+def decrypt_cfb(ciphertext, key, iv, rounds):
+    """
+    decrypt_cfb(string, string, list, int) -> string
+
+    Decrypts ciphertext using the CFB mode of operation.
+    """
+
+    blocks=get_blocks(ciphertext, True, "CFB", iv)
+    new_blocks=get_blocks(ciphertext, True, "CFB", iv)
+    keys=get_keys(key, rounds)
+    for i in range(1, len(new_blocks)):
+        new_blocks[i]=add_round_key(keys[0], blocks[i-1])
+        for j in range(1, rounds-1):
+            new_blocks[i]=sub_bytes(new_blocks[i])
+            new_blocks[i]=shift_rows(new_blocks[i])
+            new_blocks[i]=mix_columns(new_blocks[i])
+            new_blocks[i]=add_round_key(keys[j], new_blocks[i])
+        new_blocks[i]=sub_bytes(new_blocks[i])
+        new_blocks[i]=shift_rows(new_blocks[i])
+        new_blocks[i]=add_round_key(keys[rounds-1], new_blocks[i])
+        new_blocks[i]=add_round_key(blocks[i], new_blocks[i])
+    text=reassemble(new_blocks[1:], False, "CFB")
+    return text
+
+def encrypt_ofb(text, key, iv, rounds, flag):
+    """
+    encrypt_ofb(string, string, list, int, boolean) -> string
+
+    If the boolean is True, returns the encrypted message. Otherwise, returns the decrypted message.
+    """
+
+    blocks=get_blocks(text, rev(flag), "OFB", iv)
+    new_blocks=get_blocks(text, rev(flag), "OFB", iv)
+    keys=get_keys(key, rounds)
+    for i in range(1, len(new_blocks)):
+        if i==1:
+            new_blocks[i]=add_round_key(keys[0], iv)
+        else:
+            new_blocks[i]=add_round_key(keys[0], temp)
+        for j in range(1, rounds-1):
+            new_blocks[i]=sub_bytes(new_blocks[i])
+            new_blocks[i]=shift_rows(new_blocks[i])
+            new_blocks[i]=mix_columns(new_blocks[i])
+            new_blocks[i]=add_round_key(keys[j], new_blocks[i])
+        new_blocks[i]=sub_bytes(new_blocks[i])
+        new_blocks[i]=shift_rows(new_blocks[i])
+        new_blocks[i]=add_round_key(keys[rounds-1], new_blocks[i])
+        temp=copy.deepcopy(new_blocks[i])
+        new_blocks[i]=add_round_key(blocks[i], new_blocks[i])
+    ciphertext=reassemble(new_blocks[1:], flag, "OFB")
+    return ciphertext
+
+
+def encrypt_pcbc(text, key, iv, rounds):
+    """
+    encrypt_pcbc(string, string, list, int) -> string
+
+    Encrypts message using the PCBC mode of operation.
+    """
+
+    old_blocks=get_blocks(text, False, "PCBC")
+    new_blocks=get_blocks(text, False, "PCBC")
+    keys=get_keys(key, rounds)
+    for i in range(len(new_blocks)):
+        if i==0:
+            new_blocks[i]=add_round_key(iv, new_blocks[i])
+        else:
+            new_blocks[i]=add_round_key(new_blocks[i-1], new_blocks[i])
+            new_blocks[i]=add_round_key(new_blocks[i], old_blocks[i-1])
+        new_blocks[i]=add_round_key(keys[0], new_blocks[i])
+        for j in range(1, rounds-1):
+            new_blocks[i]=sub_bytes(new_blocks[i])
+            new_blocks[i]=shift_rows(new_blocks[i])
+            new_blocks[i]=mix_columns(new_blocks[i])
+            new_blocks[i]=add_round_key(keys[j], new_blocks[i])
+        new_blocks[i]=sub_bytes(new_blocks[i])
+        new_blocks[i]=shift_rows(new_blocks[i])
+        new_blocks[i]=add_round_key(keys[rounds-1], new_blocks[i])
+    ciphertext=reassemble(new_blocks, True, "PCBC")
+    return ciphertext
+
+
+def decrypt_pcbc(ciphertext, key, iv, rounds):
+    """
+    decrypt_pcbc(string, string, string, int) -> string
+
+    Decrypts ciphertext using the PCBC mode of operation.
+    """
+    
+    old_blocks=get_blocks(ciphertext, True, "PCBC")
+    new_blocks=get_blocks(ciphertext, True, "PCBC")
+    keys=get_keys(key, rounds)
+    for i in range(len(new_blocks)):
+        new_blocks[i]=add_round_key(keys[rounds-1], new_blocks[i])
+        new_blocks[i]=shift_rows_inv(new_blocks[i])
+        new_blocks[i]=sub_bytes_inv(new_blocks[i])
+        for j in range(1, rounds-1):
+            new_blocks[i]=add_round_key(keys[rounds-j-1], new_blocks[i])
+            new_blocks[i]=mix_columns_inv(new_blocks[i])
+            new_blocks[i]=shift_rows_inv(new_blocks[i])
+            new_blocks[i]=sub_bytes_inv(new_blocks[i])
+        new_blocks[i]=add_round_key(keys[0], new_blocks[i])
+        if i==0:
+            new_blocks[i]=add_round_key(iv, new_blocks[i])
+        else:
+            new_blocks[i]=add_round_key(new_blocks[i-1], new_blocks[i])
+            new_blocks[i]=add_round_key(new_blocks[i], old_blocks[i-1])
+    text=reassemble(new_blocks, False, "PCBC")
+    return text
+
+
+def process_request(mode, choice, message, rounds, raw_key, raw_iv=None):
+    """
+    process_request(string, string, string, int, string, string) -> string
 
     Processes the request to encrypt or decrypt the message.
     """
     
     key=""
     for i in range(len(raw_key)):
-        key+=decimal_to_16(ord(raw_key[i]), 2)
+        key+=str(decimal_to_16(ord(raw_key[i]), 2))
 
     iv=[]
-    temp1=[]
-    temp2=[]
-    temp3=[]
-    temp4=[]
-    for i in range(0, 16, 4):
-        temp1.append(decimal_to_16(ord(raw_iv[i]), 2))
-        temp2.append(decimal_to_16(ord(raw_iv[i+1]), 2))
-        temp3.append(decimal_to_16(ord(raw_iv[i+2]), 2))
-        temp4.append(decimal_to_16(ord(raw_iv[i+3]), 2))
-    iv.append(temp1)
-    iv.append(temp2)
-    iv.append(temp3)
-    iv.append(temp4)
+    if raw_iv is not None and mode not in ["EBC", "ECB"]:
+        temp1=[]
+        temp2=[]
+        temp3=[]
+        temp4=[]
+        for i in range(0, 16, 4):
+            temp1.append(decimal_to_16(ord(raw_iv[i]), 2))
+            temp2.append(decimal_to_16(ord(raw_iv[i+1]), 2))
+            temp3.append(decimal_to_16(ord(raw_iv[i+2]), 2))
+            temp4.append(decimal_to_16(ord(raw_iv[i+3]), 2))
+        iv.append(temp1)
+        iv.append(temp2)
+        iv.append(temp3)
+        iv.append(temp4)
 
-    if choice=="encrypt":
-        return encrypt(message, key, iv, rounds)
-    else:
-        return decrypt(message, key, iv, rounds)
+    # Select correct function
+    if mode in ["EBC", "ECB"]:
+        if choice=="encrypt":
+            return encrypt_ebc(message, key, rounds)
+        else:
+            return decrypt_ebc(message, key, rounds)
+    elif mode=="CBC":
+        if choice=="encrypt":
+            return encrypt_cbc(message, key, iv, rounds)
+        else:
+            return decrypt_cbc(message, key, iv, rounds)
+    elif mode=="CFB":
+        if choice=="encrypt":
+            return encrypt_cfb(message, key, iv, rounds)
+        else:
+            return decrypt_cfb(message, key, iv, rounds)
+    elif mode=="OFB":
+        if choice=="encrypt":
+            return encrypt_ofb(message, key, iv, rounds, True)
+        else:
+            return encrypt_ofb(message, key, iv, rounds, False)
+    elif mode=="PCBC":
+        if choice=="encrypt":
+            return encrypt_pcbc(message, key, iv, rounds)
+        else:
+            return decrypt_pcbc(message, key, iv, rounds)
+
 
 if __name__=="__main__":
     if len(sys.argv)>1:
-        # CLI Mode: choice, message, rounds, key, iv
-        choice=sys.argv[1].lower()
-        message=sys.argv[2]
-        rounds=int(sys.argv[3])
-        raw_key=sys.argv[4]
-        raw_iv=sys.argv[5]
-        print(process_request(choice, message, rounds, raw_key, raw_iv))
+        # CLI Mode: mode, choice, message, rounds, key, iv (optional)
+        mode=sys.argv[1].upper()
+        choice=sys.argv[2].lower()
+        message=sys.argv[3]
+        rounds=int(sys.argv[4])
+        raw_key=sys.argv[5]
+        raw_iv=sys.argv[6] if len(sys.argv)>6 else None
+        print(process_request(mode, choice, message, rounds, raw_key, raw_iv))
     else:
         # Interactive Mode
+        # Choose encryption method
+        print("Choose the encryption method (EBC, CBC, CFB, OFB, PCBC): ")
+        mode=input().upper().strip("!,.? ")
+        while mode not in ["EBC", "ECB", "CBC", "CFB", "OFB", "PCBC"]:
+            print("Invalid mode! Choose from EBC, CBC, CFB, OFB, PCBC: ")
+            mode=input().upper().strip("!,.? ")
+
         # Choose encryption/decryption
         choice=input("Encrypt or decrypt? ").lower().strip("!,.? ")
         while choice not in ["encrypt", "decrypt"]:
@@ -630,15 +839,17 @@ if __name__=="__main__":
                 print("The key must be 32 characters long.")
                 temp_key=input()
     
-        # Input initialization vector
-        print("Please input the initialization vector: (16 characters long)")
-        temp_iv=input()
-        while len(temp_iv)!=16:
-            print("The initialization vector must be 16 characters long!")
+        # Input initialization vector if needed
+        temp_iv=None
+        if mode not in ["EBC", "ECB"]:
+            print("Please input the initialization vector: (16 characters long)")
             temp_iv=input()
+            while len(temp_iv)!=16:
+                print("The initialization vector must be 16 characters long!")
+                temp_iv=input()
     
         # Print out the ciphertext/plaintext
-        result=process_request(choice, message, rounds, temp_key, temp_iv)
+        result=process_request(mode, choice, message, rounds, temp_key, temp_iv)
         if choice=="encrypt":
             print("Here is the ciphertext:", result)
         else:

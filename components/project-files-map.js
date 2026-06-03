@@ -19,11 +19,7 @@ export const ProjectFilesMap = {
         'index.html',
         'styles.css',
         'script.js',
-        'AES-CBC.py',
-        'AES-CFB.py',
-        'AES-EBC.py',
-        'AES-OFB.py',
-        'AES-PCBC.py'
+        'AES.py'
     ],
     '/major-projects/chess/index.html': [
         'index.html',
