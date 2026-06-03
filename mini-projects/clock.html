@@ -104,7 +104,7 @@
         document.getElementById('date').textContent = lastDate.toLocaleDateString(undefined, dateOptions);
         document.getElementById('time').textContent = lastDate.toLocaleTimeString(undefined, timeOptions);
     }
-
+    
     /**
      * Starts the clock interval to update every second.
      */
@@ -112,7 +112,7 @@
         updateClock();
         clockInterval = setInterval(() => updateClock(), 1000);
     }
-
+    
     let clockInterval, lastDate = new Date();
     
     // Populate time zones
@@ -124,7 +124,7 @@
         const option = document.createElement('option');
         option.value = zone;
         let label = zone.replace(/_/g, ' ');
-
+        
         // Get short timezone name
         const parts = new Intl.DateTimeFormat('en-US', {
             timeZone: zone,
@@ -139,7 +139,7 @@
         }
         select.appendChild(option);
     });
-
+    
     const toggleButton = document.getElementById('toggle-btn');
     select.addEventListener('change', () => {
         if (toggleButton.textContent==='Start') {

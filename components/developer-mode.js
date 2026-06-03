@@ -8,10 +8,10 @@ class DeveloperMode extends HTMLElement {
         this.attachShadow({mode: 'open'});
         this._observer = null;
     }
-
+    
     async connectedCallback() {
         const currentPath = window.location.pathname;
-
+        
         // Add index.html when missing for proper developer mode
         let normalizedPath = currentPath;
         if (normalizedPath.endsWith('/')) {
@@ -19,7 +19,7 @@ class DeveloperMode extends HTMLElement {
         } else if (!normalizedPath.split('/').pop().includes('.')) {
             normalizedPath += '/index.html';
         }
-
+        
         let matchKey = null;
         for (const key of Object.keys(ProjectFilesMap)) {
             if (normalizedPath.endsWith(key)) {
@@ -27,9 +27,9 @@ class DeveloperMode extends HTMLElement {
                 break;
             }
         }
-
+        
         if (!matchKey) return;
-
+        
         const files = ProjectFilesMap[matchKey];
         let html = `
             <style>
@@ -42,7 +42,7 @@ class DeveloperMode extends HTMLElement {
                     padding: 0 1rem;
                     font-family: Arial, Helvetica, sans-serif;
                 }
-
+                
                 /* Code block styling */
                 .dev-mode-title {
                     font-size: 1.5rem;
@@ -106,7 +106,7 @@ class DeveloperMode extends HTMLElement {
                 .token.function, .token.property, .token.atrule, .token.builtin { color: #4b0082 !important; }
                 .token.number, .token.boolean { color: #005000 !important; }
                 .token.class-name { color: #5d2d0b !important; }
-
+                
                 /* Dark mode */
                 :host([data-theme="dark"]) .token.comment, :host([data-theme="dark"]) .token.prolog, :host([data-theme="dark"]) .token.doctype, :host([data-theme="dark"]) .token.namespace { color: #d1d5db !important; }
                 :host([data-theme="dark"]) .token.punctuation { color: #ffffff !important; }
@@ -121,7 +121,7 @@ class DeveloperMode extends HTMLElement {
                 <hr style="margin-bottom: 2rem; border: none; border-top: 1px solid var(--border-color, #cccccc);">
                 <h2 class="dev-mode-title">Developer Mode: Source Code</h2>
         `;
-
+        
         for (const file of files) {
             html += `
                 <div class="code-card">
@@ -138,7 +138,7 @@ class DeveloperMode extends HTMLElement {
         html += `</div>`; // closing dev-mode-container
         this.shadowRoot.innerHTML = html;
         await this.loadPrism();
-
+        
         // Fetch and display code
         for (const file of files) {
             try {
@@ -162,7 +162,7 @@ class DeveloperMode extends HTMLElement {
                 }
             }
         }
-
+        
         // Keep theme in sync
         const updateTheme = () => {
             if (document.documentElement.getAttribute('data-theme')==='dark') {
@@ -175,14 +175,14 @@ class DeveloperMode extends HTMLElement {
         this._observer = new MutationObserver(updateTheme);
         this._observer.observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
     }
-
+    
     disconnectedCallback() {
         if (this._observer) {
             this._observer.disconnect();
             this._observer = null;
         }
     }
-
+    
     addLineNumbers(codeEl) {
         const lineCount = codeEl.innerHTML.split('\n').length;
         let numbers = '';
@@ -192,7 +192,7 @@ class DeveloperMode extends HTMLElement {
         const lineNumbersHtml = `<div class="line-numbers">${numbers}</div>`;
         codeEl.closest('pre').insertAdjacentHTML('beforebegin', lineNumbersHtml);
     }
-
+    
     getLanguage(filename) {
         if (filename.endsWith('.js')) return 'javascript';
         if (filename.endsWith('.css')) return 'css';
@@ -200,11 +200,11 @@ class DeveloperMode extends HTMLElement {
         if (filename.endsWith('.py')) return 'python';
         return 'none';
     }
-
+    
     async loadPrism() {
         if (window.Prism) return Promise.resolve();
         if (prismLoadingPromise) return prismLoadingPromise;
-
+        
         prismLoadingPromise = new Promise((resolve, reject) => {
             const script = document.createElement('script');
             script.src = 'https://cdn.jsdelivr.net/npm/prismjs@1.30.0/prism.min.js';

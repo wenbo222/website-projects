@@ -5,10 +5,10 @@ class GlobalHeader extends HTMLElement {
         super();
         this.attachShadow({mode: 'open'});
     }
-
+    
     connectedCallback() {
         const rootUrl = new URL('../', import.meta.url).href;
-
+        
         this.shadowRoot.innerHTML = `
             <style>
                 /* Heading theme styling */
@@ -50,7 +50,7 @@ class GlobalHeader extends HTMLElement {
                     --menu-group-title: #aaaaaa;
                     --hamburger-line: #ffffff;
                 }
-
+                
                 /* Title styling */
                 header {
                     display: flex;
@@ -86,7 +86,7 @@ class GlobalHeader extends HTMLElement {
                     display: inline-block;
                     transition: background-color 0.3s;
                 }
-
+                
                 /* Search bar styling */
                 .search-bar {
                     display: flex;
@@ -114,7 +114,7 @@ class GlobalHeader extends HTMLElement {
                 .search-bar input::placeholder {
                     color: var(--search-icon);
                 }
-
+                
                 /* Dropdown styling */
                 .nav-links {
                     display: flex;
@@ -171,7 +171,7 @@ class GlobalHeader extends HTMLElement {
                 .dropdown:hover .dropdown-content {
                     display: block;
                 }
-
+                
                 /* Action buttons styling */
                 .actions {
                     display: flex;
@@ -227,7 +227,7 @@ class GlobalHeader extends HTMLElement {
                     left: auto;
                     right: 0;
                 }
-
+                
                 /* Hamburger three-line styling (low width screen) */
                 .hamburger {
                     display: none;
@@ -260,7 +260,7 @@ class GlobalHeader extends HTMLElement {
                     opacity: 1;
                     visibility: visible;
                 }
-
+                
                 /* Hamburger menu styling (low width screen) */
                 .mobile-menu {
                     display: none;
@@ -331,7 +331,7 @@ class GlobalHeader extends HTMLElement {
                     </svg>
                     <input type="text" placeholder="Search...">
                 </div>
-
+                
                 <nav class="nav-links">
                     <div class="dropdown">
                         <a href="${rootUrl}major-projects/index.html" class="dropbtn">Major Projects</a>
@@ -353,7 +353,7 @@ class GlobalHeader extends HTMLElement {
                             <a href="${rootUrl}medium-projects/typing-test/index.html">Typing Test</a>
                         </div>
                     </div>
-
+                    
                     <div class="dropdown">
                         <a href="${rootUrl}mini-projects/index.html" class="dropbtn">Mini Projects</a>
                         <div class="dropdown-content">
@@ -364,7 +364,7 @@ class GlobalHeader extends HTMLElement {
                             <a href="${rootUrl}mini-projects/task-manager.html">Task Manager</a>
                         </div>
                     </div>
-
+                    
                     <div class="dropdown">
                         <a href="${rootUrl}tech-demo/index.html" class="dropbtn">Tech Demo</a>
                         <div class="dropdown-content">
@@ -374,7 +374,7 @@ class GlobalHeader extends HTMLElement {
                         </div>
                     </div>
                 </nav>
-
+                
                 <div class="actions">
                     <div class="dropdown">
                         <button class="btn btn-outline" id="theme-btn-toggle">Theme: System</button>
@@ -387,16 +387,16 @@ class GlobalHeader extends HTMLElement {
                     <button class="btn btn-outline" id="dev-mode-toggle">Dev Mode: Off</button>
                     <a href="https://github.com/wenbo222/website-projects" target="_blank" class="btn btn-filled">GitHub</a>
                 </div>
-
+                
                 <div class="hamburger" id="menu-toggle">
                     <span></span>
                     <span></span>
                     <span></span>
                 </div>
             </header>
-
+            
             <div class="menu-backdrop" id="menu-backdrop"></div>
-
+            
             <div class="mobile-menu" id="mobile-menu">
                 <a href="${rootUrl}major-projects/index.html" class="group-title">Major Projects</a>
                 <a class="sub-link" href="${rootUrl}major-projects/technical-report/index.html">Technical Report</a>
@@ -405,12 +405,12 @@ class GlobalHeader extends HTMLElement {
                 <a class="sub-link" href="${rootUrl}major-projects/image-manipulation/index.html">Image Manipulation</a>
                 <a class="sub-link" href="${rootUrl}major-projects/pathfinding-visualizer/index.html">Pathfinding Visualizer</a>
                 <a class="sub-link" href="${rootUrl}major-projects/web-browser/index.html">Web Browser</a>
-
+                
                 <a href="${rootUrl}medium-projects/index.html" class="group-title">Medium Projects</a>
                 <a class="sub-link" href="${rootUrl}medium-projects/markdown-to-html/index.html">Markdown to HTML</a>
                 <a class="sub-link" href="${rootUrl}medium-projects/pixel-art-editor/index.html">Pixel Art Editor</a>
                 <a class="sub-link" href="${rootUrl}medium-projects/typing-test/index.html">Typing Test</a>
-
+                
                 <a href="${rootUrl}mini-projects/index.html" class="group-title">Mini Projects</a>
                 <a class="sub-link" href="${rootUrl}mini-projects/bill-calculator.html">Bill Calculator</a>
                 <a class="sub-link" href="${rootUrl}mini-projects/clock.html">Clock</a>
@@ -422,7 +422,7 @@ class GlobalHeader extends HTMLElement {
                 <a class="sub-link" href="${rootUrl}tech-demo/informal-report/index.html">Informal Report</a>
                 <a class="sub-link" href="${rootUrl}tech-demo/image-extractor/index.html">Image Extractor</a>
                 <a class="sub-link" href="${rootUrl}tech-demo/sample-bfs/index.html">Sample BFS</a>
-
+                
                 <div class="group-title">Site Settings</div>
                 <button class="sub-link mobile-theme-btn" data-theme="system">Theme: System</button>
                 <button class="sub-link mobile-theme-btn" data-theme="light">Theme: Light</button>
@@ -431,13 +431,13 @@ class GlobalHeader extends HTMLElement {
                 <a class="sub-link" href="https://github.com/wenbo222/website-projects" target="_blank">GitHub</a>
             </div>
         `;
-
+        
         /** Toggles the mobile menu and backdrop */
         const toggleMenu = () => {
             menu.classList.toggle('open');
             backdrop.classList.toggle('open');
         }
-
+        
         /** Applies the selected theme 
          * @param {string} mode - The theme mode to apply ('light', 'dark', or 'system')
         */
@@ -448,13 +448,13 @@ class GlobalHeader extends HTMLElement {
             } else if (mode==='system') {
                 isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             }
-
+            
             document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
             this.setAttribute('data-theme', isDark ? 'dark' : 'light'); 
             const labelMap = {light: 'Light', dark: 'Dark', system: 'System'};
             themeBtnToggle.textContent = 'Theme: '+labelMap[mode];
         }
-
+        
         /** Switches the theme 
          * @param {string} mode - The theme mode to switch to ('light', 'dark', or 'system')
          * @param {Event} e - The event that caused the theme switch
@@ -465,7 +465,7 @@ class GlobalHeader extends HTMLElement {
             localStorage.setItem('global-theme', mode);
             applyTheme(mode);
         };
-
+        
         /** Toggles developer mode */
         const toggleDevMode = (e) => {
             if (e) e.preventDefault();
@@ -473,7 +473,7 @@ class GlobalHeader extends HTMLElement {
             localStorage.setItem('dev-mode-enabled', newState);
             applyDevMode(newState);
         };
-
+        
         /** Applies developer mode state */
         const applyDevMode = (enabled) => {
             let devEl = document.querySelector('developer-mode');
@@ -492,7 +492,7 @@ class GlobalHeader extends HTMLElement {
                 mobileDevToggle.textContent = 'Turn On Dev Mode';
             }
         };
-
+        
         const toggle = this.shadowRoot.getElementById('menu-toggle');
         const menu = this.shadowRoot.getElementById('mobile-menu');
         const backdrop = this.shadowRoot.getElementById('menu-backdrop');
@@ -503,18 +503,18 @@ class GlobalHeader extends HTMLElement {
         const mobileOptions = this.shadowRoot.querySelectorAll('.mobile-theme-btn');
         let currentMode = localStorage.getItem('global-theme') || 'system';
         let devModeEnabled = localStorage.getItem('dev-mode-enabled')==='true';
-
+        
         // Hamburger Menu Logic
         toggle.addEventListener('click', toggleMenu);
         backdrop.addEventListener('click', toggleMenu);
-
+        
         // Dev Mode Logic
         devModeToggle.addEventListener('click', toggleDevMode);
         mobileDevToggle.addEventListener('click', (e) => {
             toggleDevMode(e);
             toggleMenu();
         });
-
+        
         // Theme Switcher Logic
         desktopOptions.forEach(opt => {
             opt.addEventListener('click', (e) => switchTheme(opt.dataset.theme, e));
@@ -526,17 +526,17 @@ class GlobalHeader extends HTMLElement {
                 backdrop.classList.remove('open');
             });
         });
-
+        
         // Initial application
         applyTheme(currentMode);
         applyDevMode(devModeEnabled);
-
+        
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
             if (currentMode==='system') {
                 applyTheme('system');
             }
         });
-
+        
         // Close mobile menu if window is resized beyond the mobile breakpoint
         window.matchMedia('(max-width: 1100px)').addEventListener('change', (e) => {
             if (!e.matches) {
@@ -544,7 +544,7 @@ class GlobalHeader extends HTMLElement {
                 backdrop.classList.remove('open');
             }
         });
-
+        
         // Sync state across multiple tabs
         window.addEventListener('storage', (e) => {
             if (e.key==='global-theme') {

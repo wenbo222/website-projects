@@ -27,7 +27,7 @@ extractBtn.addEventListener('click', () => {
                 canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
                 const byteArray = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-
+                
                 // Reconstruct image from byte array
                 const reconstructedImageData = new ImageData(
                     new Uint8ClampedArray(byteArray),
@@ -39,14 +39,14 @@ extractBtn.addEventListener('click', () => {
                 resultCanvas.height = canvas.height;
                 const resultCtx = resultCanvas.getContext('2d');
                 resultCtx.putImageData(reconstructedImageData, 0, 0);
-
+                
                 // Convert back to image for display
                 const reconstructedImg = document.createElement('img');
                 reconstructedImg.src = resultCanvas.toDataURL();
                 reconstructedImg.classList.add('show');
                 imageOutput.innerHTML = "";
                 imageOutput.appendChild(reconstructedImg);
-
+                
                 // Add a small info overlay
                 const info = document.createElement('div');
                 info.style.cssText = 'margin-top: 1rem; font-size: 0.9rem; color: var(--page-text); opacity: 0.8;';

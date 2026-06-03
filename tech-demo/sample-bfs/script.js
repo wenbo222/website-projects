@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     Prism.highlightElement(codeElement);
     addLineNumbers(codeElement);
     filenameElement.textContent = filePath;
-
+    
     // Obtain Python output
     const outputElement = document.getElementById('code-output');
     outputElement.textContent = '';

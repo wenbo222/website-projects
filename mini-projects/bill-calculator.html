@@ -76,7 +76,7 @@
     function toggleButton() {
         calcBtn.disabled = (initialTotalInput.value==='' || tipPercentInput.value==='' || taxPercentInput.value==='');
     }
-
+    
     /**
      * Calculate and display the total bill amount.
      * Logic: Total = Subtotal+(Subtotal*Tip%)+(Subtotal*Tax%)
@@ -85,11 +85,11 @@
         const subtotal = parseFloat(initialTotalInput.value) || 0;
         const tipRate = parseFloat(tipPercentInput.value) || 0;
         const taxRate = parseFloat(taxPercentInput.value) || 0;
-
+        
         const tipAmount = subtotal*(tipRate/100);
         const taxAmount = subtotal*(taxRate/100);
         const total = subtotal+tipAmount+taxAmount;
-
+        
         billOutput.style.display = 'block';
         billOutput.innerHTML = `
             <div class="result-row"><span>Subtotal:</span> <span>$${subtotal.toFixed(2)}</span></div>
@@ -98,13 +98,13 @@
             <div class="result-total result-row"><span>Total Bill:</span> <span>$${total.toFixed(2)}</span></div>
         `;
     }
-
+    
     const initialTotalInput = document.getElementById('initial-total');
     const tipPercentInput = document.getElementById('tip-percent');
     const taxPercentInput = document.getElementById('tax-percent');
     const calcBtn = document.getElementById('calc-btn');
     const billOutput = document.getElementById('bill-output');
-
+    
     initialTotalInput.addEventListener('input', toggleButton);
     tipPercentInput.addEventListener('input', toggleButton);
     taxPercentInput.addEventListener('input', toggleButton);
