@@ -7,10 +7,62 @@
     <title>AES Encryption</title>
     <script type="module" src="../../components/global-header.js"></script>
     <link rel="stylesheet" href="../../global-styles.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pyodide.js"></script>
 </head>
 <body>
     <global-header></global-header>
-    <h1 id="title">AES Encryption</h1>
-
+    <main>
+        <h1 id="title">AES Encryption</h1>
+        <div class="aes-card">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="mode-select">Encryption Method</label>
+                    <select id="mode-select">
+                        <option value="ECB" selected>ECB (Electronic Code Book)</option>
+                        <option value="CBC">CBC (Cipher Block Chaining)</option>
+                        <option value="CFB">CFB (Cipher Feedback)</option>
+                        <option value="OFB">OFB (Output Feedback)</option>
+                        <option value="PCBC">PCBC (Propagating Cipher Block Chaining)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="action-select">Action</label>
+                    <select id="action-select">
+                        <option value="encrypt" selected>Encrypt</option>
+                        <option value="decrypt">Decrypt</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="rounds-select">Key Size / Rounds</label>
+                    <select id="rounds-select">
+                        <option value="11" selected>AES-128 (11 rounds)</option>
+                        <option value="13">AES-192 (13 rounds)</option>
+                        <option value="15">AES-256 (15 rounds)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label id="key-label" for="key-input">Key (16 chars)</label>
+                    <input type="text" id="key-input" placeholder="Enter key...">
+                </div>
+            </div>
+            <div class="form-group" id="iv-group">
+                <label for="iv-input">Initialization Vector (16 chars)</label>
+                <input type="text" id="iv-input" placeholder="Enter 16-character IV...">
+            </div>
+            <div class="form-group">
+                <label for="message-input" id="message-label">Plaintext Message</label>
+                <textarea id="message-input" rows="4" placeholder="Enter message here..."></textarea>
+            </div>
+            <button id="process-btn" class="action-btn">Encrypt Message</button>
+            <div class="result-group">
+                <label for="result-box">Result</label>
+                <div id="result-box" class="result-box"></div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
 </body>
 </html>

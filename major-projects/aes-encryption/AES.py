@@ -470,10 +470,7 @@ def reassemble(blocks, flag, mode):
         for j in range(4):
             for i in range(4):
                 if flag:
-                    if mode in ["EBC", "ECB"]:
-                        text+=block[i][j]
-                    else:
-                        text+=block[i][j]+" "
+                    text+=block[i][j]+" "
                 else:
                     if mode in ["EBC", "ECB"]:
                         if block[i][j] in ["01", "02", "03", "04", "05", "06", "07", "08", "09", "0a", "0b", "0c", "0d", "0e", "10"]:
@@ -575,23 +572,24 @@ def decrypt_cbc(ciphertext, key, iv, rounds):
     Decrypts ciphertext using the CBC mode of operation.
     """
 
-    blocks=get_blocks(ciphertext, True, "CBC")
+    old_blocks=get_blocks(ciphertext, True, "CBC")
+    new_blocks=get_blocks(ciphertext, True, "CBC")
     keys=get_keys(key, rounds)
-    for i in range(len(blocks)):
-        blocks[i]=add_round_key(keys[rounds-1], blocks[i])
-        blocks[i]=shift_rows_inv(blocks[i])
-        blocks[i]=sub_bytes_inv(blocks[i])
+    for i in range(len(new_blocks)):
+        new_blocks[i]=add_round_key(keys[rounds-1], new_blocks[i])
+        new_blocks[i]=shift_rows_inv(new_blocks[i])
+        new_blocks[i]=sub_bytes_inv(new_blocks[i])
         for j in range(1, rounds-1):
-            blocks[i]=add_round_key(keys[rounds-j-1], blocks[i])
-            blocks[i]=mix_columns_inv(blocks[i])
-            blocks[i]=shift_rows_inv(blocks[i])
-            blocks[i]=sub_bytes_inv(blocks[i])
-        blocks[i]=add_round_key(keys[0], blocks[i])
+            new_blocks[i]=add_round_key(keys[rounds-j-1], new_blocks[i])
+            new_blocks[i]=mix_columns_inv(new_blocks[i])
+            new_blocks[i]=shift_rows_inv(new_blocks[i])
+            new_blocks[i]=sub_bytes_inv(new_blocks[i])
+        new_blocks[i]=add_round_key(keys[0], new_blocks[i])
         if i==0:
-            blocks[i]=add_round_key(iv, blocks[i])
+            new_blocks[i]=add_round_key(iv, new_blocks[i])
         else:
-            blocks[i]=add_round_key(blocks[i-1], blocks[i])
-    text=reassemble(blocks, False, "CBC")
+            new_blocks[i]=add_round_key(old_blocks[i-1], new_blocks[i])
+    text=reassemble(new_blocks, False, "CBC")
     return text
 
 
@@ -786,71 +784,60 @@ def process_request(mode, choice, message, rounds, raw_key, raw_iv=None):
             return decrypt_pcbc(message, key, iv, rounds)
 
 
-if __name__=="__main__":
-    if len(sys.argv)>1:
-        # CLI Mode: mode, choice, message, rounds, key, iv (optional)
-        mode=sys.argv[1].upper()
-        choice=sys.argv[2].lower()
-        message=sys.argv[3]
-        rounds=int(sys.argv[4])
-        raw_key=sys.argv[5]
-        raw_iv=sys.argv[6] if len(sys.argv)>6 else None
-        print(process_request(mode, choice, message, rounds, raw_key, raw_iv))
-    else:
-        # Interactive Mode
-        # Choose encryption method
-        print("Choose the encryption method (EBC, CBC, CFB, OFB, PCBC): ")
+if __name__=="__main__" and sys.platform!="emscripten":
+    # Choose encryption method
+    print("Choose the encryption method (EBC, CBC, CFB, OFB, PCBC): ")
+    mode=input().upper().strip("!,.? ")
+    while mode not in ["EBC", "ECB", "CBC", "CFB", "OFB", "PCBC"]:
+        print("Invalid mode! Choose from EBC, CBC, CFB, OFB, PCBC: ")
         mode=input().upper().strip("!,.? ")
-        while mode not in ["EBC", "ECB", "CBC", "CFB", "OFB", "PCBC"]:
-            print("Invalid mode! Choose from EBC, CBC, CFB, OFB, PCBC: ")
-            mode=input().upper().strip("!,.? ")
 
-        # Choose encryption/decryption
-        choice=input("Encrypt or decrypt? ").lower().strip("!,.? ")
-        while choice not in ["encrypt", "decrypt"]:
-            choice=input("Invalid input! Encrypt or decrypt? ").lower().strip("!,.? ")
-        if choice=="encrypt":
-            print("Note that encrypting only accpets real text (not hexadecimals).")
-        else:
-            print("Note that decrypting only accepts hexadecimals, separated by spaces.")
-    
-        # Enter message
-        message=input("Enter the message you want to "+choice+": ")
-        print("Choose the number of rounds you want to "+choice+": ")
-        print("Note that AES-128 requires 11 rounds, AES-192 requires 13 rounds, and AES-256 requires 15 rounds.")
+    # Choose encryption/decryption
+    choice=input("Encrypt or decrypt? ").lower().strip("!,.? ")
+    while choice not in ["encrypt", "decrypt"]:
+        choice=input("Invalid input! Encrypt or decrypt? ").lower().strip("!,.? ")
+    if choice=="encrypt":
+        print("Note that encrypting only accpets real text (not hexadecimals).")
+    else:
+        print("Note that decrypting only accepts hexadecimals, separated by spaces.")
+
+    # Enter message
+    message=input("Enter the message you want to "+choice+": ")
+    print("Choose the number of rounds you want to "+choice+": ")
+    print("Note that AES-128 requires 11 rounds, AES-192 requires 13 rounds, and AES-256 requires 15 rounds.")
+    rounds=int(input_a_number())
+    while rounds not in [11, 13, 15]:
+        print("Please input the correct number: ")
         rounds=int(input_a_number())
-        while rounds not in [11, 13, 15]:
-            print("Please input the correct number: ")
-            rounds=int(input_a_number())
-    
-        # Input Key
-        print("Please input the key: ")
-        temp_key=input()
-        if rounds==11:
-            while len(temp_key)!=16:
-                print("The key must be 16 characters long.")
-                temp_key=input()
-        elif rounds==13:
-            while len(temp_key)!=24:
-                print("The key must be 24 characters long.")
-                temp_key=input()
-        else:
-            while len(temp_key)!=32:
-                print("The key must be 32 characters long.")
-                temp_key=input()
-    
-        # Input initialization vector if needed
-        temp_iv=None
-        if mode not in ["EBC", "ECB"]:
-            print("Please input the initialization vector: (16 characters long)")
+
+    # Input Key
+    print("Please input the key: ")
+    temp_key=input()
+    if rounds==11:
+        while len(temp_key)!=16:
+            print("The key must be 16 characters long.")
+            temp_key=input()
+    elif rounds==13:
+        while len(temp_key)!=24:
+            print("The key must be 24 characters long.")
+            temp_key=input()
+    else:
+        while len(temp_key)!=32:
+            print("The key must be 32 characters long.")
+            temp_key=input()
+
+    # Input initialization vector if needed
+    temp_iv=None
+    if mode not in ["EBC", "ECB"]:
+        print("Please input the initialization vector: (16 characters long)")
+        temp_iv=input()
+        while len(temp_iv)!=16:
+            print("The initialization vector must be 16 characters long!")
             temp_iv=input()
-            while len(temp_iv)!=16:
-                print("The initialization vector must be 16 characters long!")
-                temp_iv=input()
-    
-        # Print out the ciphertext/plaintext
-        result=process_request(mode, choice, message, rounds, temp_key, temp_iv)
-        if choice=="encrypt":
-            print("Here is the ciphertext:", result)
-        else:
-            print("Here is the plaintext:", result)
+
+    # Print out the ciphertext/plaintext
+    result=process_request(mode, choice, message, rounds, temp_key, temp_iv)
+    if choice=="encrypt":
+        print("Here is the ciphertext:", result)
+    else:
+        print("Here is the plaintext:", result)
