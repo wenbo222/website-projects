@@ -481,16 +481,6 @@ def reassemble(blocks, flag, mode):
                     text+=chr(int(block[i][j], base=16))
     return text
 
-def rev(flag):
-    """
-    rev(boolean) -> boolean
-
-    If the boolean is True, returns False. Otherwise, returns True.
-    """
-
-    if flag==True:
-        return False
-    return True
 
 def encrypt_ebc(text, key, rounds):
     """
@@ -649,8 +639,8 @@ def encrypt_ofb(text, key, iv, rounds, flag):
     If the boolean is True, returns the encrypted message. Otherwise, returns the decrypted message.
     """
 
-    blocks=get_blocks(text, rev(flag), "OFB", iv)
-    new_blocks=get_blocks(text, rev(flag), "OFB", iv)
+    blocks=get_blocks(text, not flag, "OFB", iv)
+    new_blocks=get_blocks(text, not flag, "OFB", iv)
     keys=get_keys(key, rounds)
     for i in range(1, len(new_blocks)):
         if i==1:

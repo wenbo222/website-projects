@@ -9,6 +9,7 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
+/* Select/Input Styling */
 .form-group {
     margin-bottom: 1.25rem;
 }
@@ -23,18 +24,18 @@
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
 }
-
-.action-btn {
+#process-btn {
     width: 100%;
     margin-top: 1rem;
 }
 
+/* Output styling */
 .result-group {
     margin-top: 1.5rem;
     border-top: 1px solid var(--border-color);
     padding-top: 1.5rem;
 }
-.result-box {
+#result-box {
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.05rem;
     word-break: break-all;
