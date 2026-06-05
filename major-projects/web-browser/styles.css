@@ -1,0 +1,34 @@
+/* General styling */
+main {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px);
+    width: 100%;
+    padding: 0;
+}
+
+/* URL bar styling */
+.url-bar {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--container-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+.url-bar input {
+    flex-grow: 1;
+}
+.url-bar button {
+    flex-shrink: 0;
+}
+
+/* Website styling */
+.viewport-container {
+    flex-grow: 1;
+    width: 100%;
+}
+#browser-viewport {
+    width: 100%;
+    height: 100%;
+    border: none;
+}

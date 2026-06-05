@@ -40,7 +40,8 @@ export const ProjectFilesMap = {
     ],
     '/major-projects/web-browser/index.html': [
         'index.html',
-        'styles.css'
+        'styles.css',
+        'browser.js'
     ],
     '/medium-projects/markdown-to-html/index.html': [
         'index.html',

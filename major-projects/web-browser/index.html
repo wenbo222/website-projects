@@ -7,9 +7,19 @@
     <title>Web Browser</title>
     <script type="module" src="../../components/global-header.js"></script>
     <link rel="stylesheet" href="../../global-styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <global-header></global-header>
-    <h1 id="title">Web Browser</h1>
+    <main>
+        <form id="url-form" class="url-bar">
+            <input type="text" id="url-input" placeholder="Enter web URL (e.g. example.com)" required>
+            <button type="submit">Go</button>
+        </form>
+        <div class="viewport-container">
+            <iframe id="browser-viewport" title="Web browser viewport" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+        </div>
+    </main>
+    <script src="browser.js"></script>
 </body>
 </html>
