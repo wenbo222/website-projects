@@ -134,9 +134,9 @@
         </form>
         <div>
             <div class="task-filters">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="pending">Pending</button>
-                <button class="filter-btn" data-filter="completed">Completed</button>
+                <button type="button" class="filter-btn active" data-filter="all">All</button>
+                <button type="button" class="filter-btn" data-filter="pending">Pending</button>
+                <button type="button" class="filter-btn" data-filter="completed">Completed</button>
             </div>
             <ul id="task-list"></ul>
         </div>
@@ -246,6 +246,7 @@
             
             // Create and add delete button
             const deleteBtn = document.createElement('button');
+            deleteBtn.type = 'button';
             deleteBtn.className = 'delete-btn';
             deleteBtn.textContent = 'Delete';
             deleteBtn.addEventListener('click', () => deleteTask(task.id));
