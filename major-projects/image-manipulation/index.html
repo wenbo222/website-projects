@@ -4,12 +4,32 @@
     <script src="../../components/theme-loader.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../global-styles.css">
+    <link rel="stylesheet" href="styles.css">
     <title>Image Manipulation</title>
     <script type="module" src="../../components/global-header.js"></script>
-    <link rel="stylesheet" href="../../global-styles.css">
 </head>
 <body>
     <global-header></global-header>
-    <h1 id="title">Image Manipulation</h1>
+    <main>
+        <h1 id="title">Image Manipulation</h1>
+        
+        <div class="upload-section">
+            <label for="image-input" class="custom-file-upload">Choose Image File</label>
+            <input type="file" id="image-input" accept="image/*" title="Select an image file">
+        </div>
+        <div class="control-panel">
+            <button id="grayscale-btn" class="filter-btn" disabled>Grayscale</button>
+            <button id="sepia-btn" class="filter-btn" disabled>Sepia</button>
+            <button id="mirror-btn" class="filter-btn" disabled>Mirror</button>
+            <button id="reset-btn" disabled>Reset</button>
+            <button id="download-btn" disabled>Save Image</button>
+        </div>
+        <div id="preview-container">
+            <div class="placeholder-text">Please upload an image</div>
+        </div>
+        <div id="info-text"></div>
+    </main>
+    <script type="module" src="app.js"></script>
 </body>
 </html>
