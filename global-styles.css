@@ -53,16 +53,17 @@ a {
     text-decoration: underline;
     transition: color 0.2s;
 }
-a:hover {
-    color: var(--link-hover);
-}
 a:visited {
     color: var(--link-visited);
+}
+a:hover {
+    color: var(--link-hover);
 }
 a:active {
     color: var(--link-active);
 }
 p, h2, h3, h4, h5, h6, li, main, section, dt, dd {
+    color: var(--page-text);
     padding: 0 1rem;
 }
 p {
