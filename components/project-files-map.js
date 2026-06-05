@@ -29,7 +29,10 @@ export const ProjectFilesMap = {
     ],
     '/major-projects/image-manipulation/index.html': [
         'index.html',
-        'styles.css'
+        'styles.css',
+        'app.js',
+        'canvas.js',
+        'filters.js'
     ],
     '/major-projects/pathfinding-visualizer/index.html': [
         'index.html',
