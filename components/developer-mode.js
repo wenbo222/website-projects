@@ -99,6 +99,10 @@ class DeveloperMode extends HTMLElement {
                 }
                 
                 /* Light mode */
+                pre[class*="language-"],
+                code[class*="language-"] {
+                    color: #222222 !important;
+                }
                 .token.comment, .token.prolog, .token.doctype, .token.namespace { color: #3c4248 !important; }
                 .token.punctuation { color: #222222 !important; }
                 .token.keyword, .token.operator, .token.tag, .token.attr-name, .token.selector, .token.important { color: #8e121e !important; }
