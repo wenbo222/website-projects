@@ -112,6 +112,10 @@ class DeveloperMode extends HTMLElement {
                 .token.class-name { color: #5d2d0b !important; }
                 
                 /* Dark mode */
+                :host([data-theme="dark"]) pre[class*="language-"],
+                :host([data-theme="dark"]) code[class*="language-"] {
+                    color: #ffffff !important;
+                }
                 :host([data-theme="dark"]) .token.comment, :host([data-theme="dark"]) .token.prolog, :host([data-theme="dark"]) .token.doctype, :host([data-theme="dark"]) .token.namespace { color: #d1d5db !important; }
                 :host([data-theme="dark"]) .token.punctuation { color: #ffffff !important; }
                 :host([data-theme="dark"]) .token.keyword, :host([data-theme="dark"]) .token.operator, :host([data-theme="dark"]) .token.tag, :host([data-theme="dark"]) .token.attr-name, :host([data-theme="dark"]) .token.selector, :host([data-theme="dark"]) .token.important { color: #ffbcbc !important; }
