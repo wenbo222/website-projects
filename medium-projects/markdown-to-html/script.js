@@ -1,7 +1,8 @@
 /**
  * Converts markdown text to HTML; note that indented code blocks are not supported.
- * @param {string} markdownText The markdown text to convert
- * @returns {string} The HTML (i.e., converted text)
+ * @param {string} markdownText - The markdown text to convert
+ * @param {Object|null} [globalRefs=null] - Optional global references object
+ * @returns {string} - The HTML (i.e., converted text)
  */
 function convertMarkdown(markdownText, globalRefs = null) {
     /**
