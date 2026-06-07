@@ -308,7 +308,7 @@ class GlobalHeader extends HTMLElement {
                     padding-left: 1.5rem;
                     font-size: 0.95rem;
                 }
-                @media (max-width: 1100px) {
+                @media (max-width: 68.75rem) {
                     .nav-links, .search-bar, .actions {
                         display: none;
                     }
@@ -538,7 +538,7 @@ class GlobalHeader extends HTMLElement {
         });
         
         // Close mobile menu if window is resized beyond the mobile breakpoint
-        window.matchMedia('(max-width: 1100px)').addEventListener('change', (e) => {
+        window.matchMedia('(max-width: 68.75rem)').addEventListener('change', (e) => {
             if (!e.matches) {
                 menu.classList.remove('open');
                 backdrop.classList.remove('open');
