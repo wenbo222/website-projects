@@ -24,7 +24,7 @@ viewport.addEventListener('load', () => {
             const link = e.target.closest('a');
             if (link) {
                 const href = link.href;
-                if (href && !href.startsWith('javascript:')) {
+                if (href && !href.startsWith('javascript:') && !href.startsWith('data:') && !href.startsWith('vbscript:')) {
                     // If it is still on the same page, let the default behavior handle it
                     try {
                         const currentUrlObj = new URL(currentUrl);
