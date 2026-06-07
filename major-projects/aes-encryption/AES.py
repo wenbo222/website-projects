@@ -774,7 +774,7 @@ def process_request(mode, choice, message, rounds, raw_key, raw_iv=None):
             return decrypt_pcbc(message, key, iv, rounds)
 
 
-if __name__=="__main__" and sys.platform!="emscripten":
+if __name__=="__main__" and sys.platform!="emscripten": # preserved to run on its own if needed
     # Choose encryption method
     print("Choose the encryption method (EBC, CBC, CFB, OFB, PCBC): ")
     mode=input().upper().strip("!,.? ")

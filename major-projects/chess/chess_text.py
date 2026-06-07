@@ -2,6 +2,7 @@
 # Wenbo
 
 import copy
+import sys
 
 # Define constants
 ROW=8 # There are 8 rows, labelled 0-7.
@@ -40,6 +41,7 @@ castling_kb=False # Whether the move is a black kingside castle
 castling_qb=False # Whether the move is a black queenside castle
 promotion=False # Whether the move is a promotion
 en_passant=False # Whether the move is en passant
+check=False # Whether the king is in check
 turn="W" # Whose turn it is
 draw_count=0 # If reaches 50, draw
 
@@ -796,7 +798,7 @@ def isvalid_pawn(board, start, end, turn, flag):
 
         # Pawns can't move forward if it is blocked
         if start[1]==end[1]:
-            for i in range(end[0]+1, start[0]):
+            for i in range(end[0], start[0]):
                 if board[i][start[1]]!="  ":
                     return False
         
@@ -832,7 +834,7 @@ def isvalid_pawn(board, start, end, turn, flag):
 
         # Pawns can't move forward if it is blocked
         if start[1]==end[1]:
-            for i in range(start[0]+1, end[0]):
+            for i in range(start[0]+1, end[0]+1):
                 if board[i][start[1]]!="  ":
                     return False
         
@@ -927,7 +929,7 @@ def isvalid_knight(board, start, end, turn, flag):
     The boolean determines whether it is necessary to modify global variables, if any.
     """
     
-    if abs(end[0]-start[0]) in [1, 2] and abs(end[1]-start[1]) in [1, 2]: # Not in any possible move of Knight
+    if (abs(end[0]-start[0])==1 and abs(end[1]-start[1])==2) or (abs(end[0]-start[0])==2 and abs(end[1]-start[1])==1):
         return True
     
     return False
@@ -1389,7 +1391,303 @@ def game_log_f(board, start, end, turn):
     return piece+s
 
 
-if __name__=="__main__":
+def init_game():
+    """
+    init_game() -> dict
+
+    Resets the global game state to the initial state and returns it.
+    """
+
+    global board, prev_boards, log, log_f, count, turn, draw_count
+    global rep_boards_w, rep_counts_w, rep_boards_b, rep_counts_b
+    global castling_right_kw, castling_right_qw, castling_right_kb, castling_right_qb
+    global en_passant_right_w, en_passant_right_b
+    global castling_kw, castling_qw, castling_kb, castling_qb
+    global promotion, en_passant, check
+
+    board=[["BR", "BN", "BB", "BQ", "BK", "BB", "BN", "BR"],
+           ["BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP"],
+           ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
+           ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
+           ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
+           ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
+           ["WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"],
+           ["WR", "WN", "WB", "WQ", "WK", "WB", "WN", "WR"]]
+    prev_boards=[]
+    log=""
+    log_f=""
+    count=0
+    rep_boards_w=[]
+    rep_counts_w=[]
+    rep_boards_b=[]
+    rep_counts_b=[]
+    castling_right_kw=True
+    castling_right_qw=True
+    castling_right_kb=True
+    castling_right_qb=True
+    en_passant_right_w=False
+    en_passant_right_b=False
+    castling_kw=False
+    castling_qw=False
+    castling_kb=False
+    castling_qb=False
+    promotion=False
+    en_passant=False
+    check=False
+    turn="W"
+    draw_count=0
+
+    return {
+        "board": copy.deepcopy(board),
+        "turn": turn,
+        "status": "G",
+        "log": log,
+        "log_f": log_f,
+        "promotion_required": False
+    }
+
+
+def web_move(start_row, start_col, end_row, end_col, promotion_piece=None):
+    """
+    web_move(int, int, int, int, string) -> dict
+
+    Processes a chess move and returns the new game state.
+    """
+
+    global board, turn, count, log, log_f, draw_count
+    global castling_right_kw, castling_right_qw, castling_right_kb, castling_right_qb
+    global en_passant_right_w, en_passant_right_b
+    global castling_kw, castling_qw, castling_kb, castling_qb
+    global promotion, en_passant, check, prev_boards
+    global rep_boards_w, rep_counts_w, rep_boards_b, rep_counts_b
+
+    start = [start_row, start_col]
+    end = [end_row, end_col]
+
+    # Check validity first without affecting global variables
+    if not isvalid(board, start, end, turn, False):
+        return {
+            "success": False,
+            "error": "Invalid Move",
+            "board": copy.deepcopy(board),
+            "turn": turn,
+            "status": status(board, turn),
+            "log": log,
+            "log_f": log_f,
+            "promotion_required": False
+        }
+
+    # Check whether this move is a pawn promotion or not
+    moving_piece = board[start[0]][start[1]]
+    is_promo = moving_piece[1]=="P" and ((turn=="W" and end[0]==0) or (turn=="B" and end[0]==7))
+
+    if is_promo:
+        if promotion_piece is None:
+            return {
+                "success": True,
+                "board": copy.deepcopy(board),
+                "turn": turn,
+                "status": status(board, turn),
+                "log": log,
+                "log_f": log_f,
+                "promotion_required": True
+            }
+        elif promotion_piece not in ["R", "N", "B", "Q"]:
+            return {
+                "success": False,
+                "error": "Invalid promotion piece. Must be R, N, B, or Q",
+                "board": copy.deepcopy(board),
+                "turn": turn,
+                "status": status(board, turn),
+                "log": log,
+                "log_f": log_f,
+                "promotion_required": True
+            }
+
+    # Re-run isvalid with flag=True to set all the global flags (castling_kw, en_passant, etc.)
+    isvalid(board, start, end, turn, True)
+
+    # Add the number of full moves and add it to the logs
+    if turn=="W":
+        count+=1
+        log+=str(count)+"."
+        log_f+=str(count)+"."
+
+    # Modify castling rights
+    if start==[7, 4] and (castling_right_kw==True or castling_right_qw==True):
+        clear_rep()
+        castling_right_kw=False
+        castling_right_qw=False
+    
+    if start==[7, 7] and castling_right_kw==True:
+        castling_right_kw=False
+        clear_rep()
+    
+    if start==[7, 0] and castling_right_qw==True:
+        castling_right_qw=False
+        clear_rep()
+    
+    if start==[0, 4] and (castling_right_kb==True or castling_right_qb==True):
+        castling_right_kb=False
+        castling_right_qb=False
+        clear_rep()
+    
+    if start==[0, 7] and castling_right_kb==True:
+        castling_right_kb=False
+        clear_rep()
+    
+    if start==[0, 0] and castling_right_qb==True:
+        castling_right_qb=False
+        clear_rep()
+
+    # Modify draw variables
+    if board[end[0]][end[1]]!="  " or board[start[0]][start[1]][1]=="P":
+        draw_count=0
+        clear_rep()
+    else:
+        draw_count+=1
+
+    # Modify logs
+    log+=game_log(board, start, end, turn)
+    log_f+=game_log_f(board, start, end, turn)
+
+    # Move pieces
+    board[end[0]][end[1]]=board[start[0]][start[1]]
+    board[start[0]][start[1]]="  "
+
+    # Check for promotion
+    if promotion==True:
+        # Update the board and logs
+        board[end[0]][end[1]]=turn+promotion_piece
+        log+="="+promotion_piece
+        log_f+="="+to_graph_piece(turn+promotion_piece)
+        promotion=False
+
+    # Check for en passant
+    if en_passant==True:
+        # Update boards
+        if turn=="W":
+            board[end[0]+1][end[1]]="  "
+        else:
+            board[end[0]-1][end[1]]="  "
+        en_passant=False
+
+    # Check for castling
+    if castling_kw==True:
+        board[7][5]="WR"
+        board[7][7]="  "
+        castling_kw=False
+
+    if castling_qw==True:
+        board[7][3]="WR"
+        board[7][0]="  "
+        castling_qw=False
+
+    if castling_kb==True:
+        board[0][5]="BR"
+        board[0][7]="  "
+        castling_kb=False
+
+    if castling_qb==True:
+        board[0][3]="BR"
+        board[0][0]="  "
+        castling_qb=False
+
+    # Remove en passant rights if one move has passed
+    if turn=="W" and en_passant_right_w==True:
+        en_passant_right_w=False
+        clear_rep()
+    if turn=="B" and en_passant_right_b==True:
+        en_passant_right_b=False
+        clear_rep()
+
+    # Store boards
+    prev_boards.append(copy.deepcopy(board))
+    if turn=="W":
+        index=rep_w(board)
+        if index is not None:
+            rep_counts_w[index]+=1
+        else:
+            rep_boards_w.append(copy.deepcopy(board))
+            rep_counts_w.append(1)
+
+    else:
+        index=rep_b(board)
+        if index is not None:
+            rep_counts_b[index]+=1
+        else:
+            rep_boards_b.append(copy.deepcopy(board))
+            rep_counts_b.append(1)
+
+    # Do further modification of logs (+ and space)
+    opp_king_in_check = in_check(board, king_pos(board, rev(turn)), turn, False)
+    if opp_king_in_check:
+        log+="+"
+        log_f+="+"
+
+    log+=" "
+    log_f+=" "
+
+    # Check whether game ends
+    temp=status(board, turn)
+    if temp=="W":
+        log=log[:-2]
+        log_f=log_f[:-2]
+        log+="# 1-0"
+        log_f+="# 1-0"
+
+    elif temp=="B":
+        log=log[:-2]
+        log_f=log_f[:-2]
+        log+="# 0-1"
+        log_f+="# 0-1"
+
+    elif temp=="D-50":
+        log, log_f=draw()
+
+    elif temp=="D-R":
+        log, log_f=draw()
+
+    elif temp=="D-S":
+        log, log_f=draw()
+
+    elif temp=="D-I":
+        log, log_f=draw()
+
+    # Switch turns
+    if turn=="W":
+        turn="B"
+    else:
+        turn="W"
+
+    return {
+        "success": True,
+        "board": copy.deepcopy(board),
+        "turn": turn,
+        "status": temp,
+        "log": log,
+        "log_f": log_f,
+        "promotion_required": False
+    }
+
+
+def get_legal_moves(start_row, start_col):
+    """
+    get_legal_moves(int, int) -> list
+
+    Returns a list of valid destination coordinates [r, c] for the piece at (start_row, start_col).
+    """
+
+    moves=[]
+    start=[start_row, start_col]
+    for r in range(ROW):
+        for c in range(COLUMN):
+            if isvalid(board, start, [r, c], turn, False):
+                moves.append([r, c])
+    return moves
+
+
+if __name__=="__main__" and sys.platform!="emscripten": # preserved to run on its own if needed
     initial_messages()
     print_board(board, turn, INDENT)
 
