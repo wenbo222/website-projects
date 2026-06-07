@@ -32,7 +32,7 @@ viewport.addEventListener('load', () => {
                         if (currentUrlObj.origin===targetUrlObj.origin && currentUrlObj.pathname===targetUrlObj.pathname) {
                             return;
                         }
-                    } catch (err) {
+                    } catch {
                         // Fallback to loading URL if URL parsing fails
                     }
                     e.preventDefault();
@@ -57,7 +57,7 @@ viewport.addEventListener('load', () => {
                 }
             }
         }, true); // Capture submits on the way down instead of when they bubble up
-    } catch (error) {
+    } catch {
         // Ignore cross-origin access errors during initial load / blank page states
     }
 });

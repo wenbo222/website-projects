@@ -21,7 +21,7 @@ function convertMarkdown(markdownText, globalRefs = null) {
     // Add reference definitions
     if (!globalRefs) {
         const definitionRegex = /^[ \t]*\[(?<id>[^\]]+)\]:\s*(?:<(?<urlBrackets>[^>]+)>|(?<urlNoBrackets>[^\s]+))(?:\s+(?:"(?<titleDouble>[^"]*)"|'(?<titleSingle>[^']*)'|\((?<titleParen>[^)]*)\)))?\s*$/gm;
-        html = html.replace(definitionRegex, (match, id, urlBrackets, urlNoBrackets, titleDouble, titleSingle, titleParen) => {
+        html = html.replace(definitionRegex, (_, id, urlBrackets, urlNoBrackets, titleDouble, titleSingle, titleParen) => {
             let url = urlBrackets || urlNoBrackets;
             let title = titleDouble || titleSingle || titleParen;
             references[id.toLowerCase()] = {url, title};
@@ -31,7 +31,7 @@ function convertMarkdown(markdownText, globalRefs = null) {
     
     // Fenced Code Blocks (Multi-line)
     const codeBlockRegex = /^[ \t]*`{3}[ \t]*(?<language>[a-z0-9-]*)[ \t]*\r?\n(?<code>[\s\S]*?)^[ \t]*`{3}/gm;
-    html = html.replace(codeBlockRegex, (match, language, code) => {
+    html = html.replace(codeBlockRegex, (_, language, code) => {
         let escapedCode = escapeSpecialChrs(code);
         let output = language ? `<pre><code class="language-${language}">${escapedCode}</code></pre>` : `<pre><code>${escapedCode}</code></pre>`;
         placeholders.push(output);
@@ -40,7 +40,7 @@ function convertMarkdown(markdownText, globalRefs = null) {
     
     // Inline Code
     const inlineCodeRegex = /(?<!\\)(?<ticks>`+)(?<code>.+?)\k<ticks>/g;
-    html = html.replace(inlineCodeRegex, (match, ticks, code) => {
+    html = html.replace(inlineCodeRegex, (_, ticks, code) => {
         let escapedCode = escapeSpecialChrs(code.trim());
         placeholders.push(`<code>${escapedCode}</code>`);
         return `MDINLINEPLACEHOLDER${placeholders.length-1}X`;
@@ -48,7 +48,7 @@ function convertMarkdown(markdownText, globalRefs = null) {
     
     // Escaped Characters
     const escapeRegex = /\\([\\`*_{}[\]()#+\-.!>])/g;
-    html = html.replace(escapeRegex, (match, char) => `&#${char.charCodeAt(0)};`);
+    html = html.replace(escapeRegex, (_, char) => `&#${char.charCodeAt(0)};`);
     
     // Blockquotes (with recursion)
     const quoteBlockRegex = /^(?:[ \t]*>.*\r?\n?)+/gm;
@@ -61,7 +61,7 @@ function convertMarkdown(markdownText, globalRefs = null) {
     
     // Groups of regex for each type of markdown
     const headingRegex = /^[ \t]*(?<level>#{1,6})[ \t]+(?<heading>.*)/gm;
-    html = html.replace(headingRegex, (match, level, heading) => {
+    html = html.replace(headingRegex, (_, level, heading) => {
         const levelNum = level.length;
         return `<h${levelNum}>${heading.trim()}</h${levelNum}>`
     });
@@ -121,14 +121,14 @@ function convertMarkdown(markdownText, globalRefs = null) {
     html = html.replace(italicRegex, `<em>$<italicText></em>`);
     
     const imgRegex = /!\[([^\]]*)\]\(([^\s)]+)(?:\s+(?:"([^"]*)"|'([^']*)'|\(([^)]*)\)))?\)/g;
-    html = html.replace(imgRegex, (match, alt, src, titleDouble, titleSingle, titleParen) => {
+    html = html.replace(imgRegex, (_, alt, src, titleDouble, titleSingle, titleParen) => {
         let title = titleDouble || titleSingle || titleParen;
         let titleAttr = title ? ` title="${title}"` : '';
         return `<img src="${src}" alt="${alt}"${titleAttr}>`;
     });
     
     const linkRegex = /\[([^\]]+)\]\(([^\s)]+)(?:\s+(?:"([^"]*)"|'([^']*)'|\(([^)]*)\)))?\)/g;
-    html = html.replace(linkRegex, (match, text, url, titleDouble, titleSingle, titleParen) => {
+    html = html.replace(linkRegex, (_, text, url, titleDouble, titleSingle, titleParen) => {
         let title = titleDouble || titleSingle || titleParen;
         let titleAttr = title ? ` title="${title}"` : '';
         return `<a href="${url}"${titleAttr}>${text}</a>`;
