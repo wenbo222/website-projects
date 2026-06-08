@@ -7,9 +7,37 @@
     <title>Chess</title>
     <script type="module" src="../../components/global-header.js"></script>
     <link rel="stylesheet" href="../../global-styles.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js"></script>
 </head>
 <body>
     <global-header></global-header>
     <h1 id="title">Chess</h1>
+    <main>
+        <div class="status-panel">
+            <span id="turn-indicator">Loading Chess Engine...</span>
+            <button type="button" id="reset-btn" disabled>New Game</button>
+        </div>
+        <div class="board-container">
+            <div class="board" id="board"></div>
+        </div>
+        <div class="pgn-container">
+            <strong>PGN Move Log:</strong>
+            <div id="pgn-log">No moves yet.</div>
+        </div>
+    </main>
+    <div id="promo-modal">
+        <div class="promo-content">
+            <h3>Pawn Promotion</h3>
+            <p>Choose piece to promote to:</p>
+            <div class="promo-options">
+                <button type="button" class="promo-btn" data-piece="Q">♕</button>
+                <button type="button" class="promo-btn" data-piece="R">♖</button>
+                <button type="button" class="promo-btn" data-piece="B">♗</button>
+                <button type="button" class="promo-btn" data-piece="N">♘</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
