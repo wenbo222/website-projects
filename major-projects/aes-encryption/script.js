@@ -52,7 +52,7 @@ function updateUI() {
     keyInput.placeholder = `Enter ${keyLen}-character key...`;
     
     // Toggle IV group visibility based on mode of encryption used
-    if (mode==='ECB' || mode==='EBC') {
+    if (mode==='ECB') {
         ivGroup.classList.add('hidden');
     } else {
         ivGroup.classList.remove('hidden');
@@ -102,7 +102,7 @@ processBtn.addEventListener('click', () => {
         return;
     }
     ivInput.setCustomValidity('');
-    if (mode!=='ECB' && mode!=='EBC' && iv.length!==16) {
+    if (mode!=='ECB' && iv.length!==16) {
         ivInput.setCustomValidity('Initialization Vector (IV) must be exactly 16 characters long.');
         ivInput.reportValidity();
         return;
@@ -116,7 +116,7 @@ processBtn.addEventListener('click', () => {
     
     // Call Python's process_request function
     try {
-        const passIv = (mode==='ECB' || mode==='EBC') ? null : iv;
+        const passIv = (mode==='ECB') ? null : iv;
         const result = pyProcessRequest(mode, action, message, rounds, key, passIv);
         resultBox.textContent = result || '[Empty Output]';
     } catch (e) {

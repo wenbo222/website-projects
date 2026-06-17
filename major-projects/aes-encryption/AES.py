@@ -1,5 +1,5 @@
 # Advanced Encryption Standard (AES)
-# Consolidated file supporting EBC, CBC, CFB, OFB, and PCBC methods of encryption.
+# Consolidated file supporting ECB, CBC, CFB, OFB, and PCBC methods of encryption.
 # Overall Citation: https://medium.com/codex/aes-how-the-most-advanced-encryption-actually-works-b6341c44edb9
 # https://en.wikipedia.org/wiki/Advanced_Encryption_Standard
 # https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf
@@ -426,7 +426,7 @@ def get_blocks(text, flag, mode, iv=None):
         temp3=[]
         temp4=[]
         
-        if mode in ["EBC", "ECB"]:
+        if mode=="ECB":
             dif=(i+1)*16-len(text)
             padding=""
             if dif>0:
@@ -472,7 +472,7 @@ def reassemble(blocks, flag, mode):
                 if flag:
                     text+=block[i][j]+" "
                 else:
-                    if mode in ["EBC", "ECB"]:
+                    if mode=="ECB":
                         if block[i][j] in ["01", "02", "03", "04", "05", "06", "07", "08", "09", "0a", "0b", "0c", "0d", "0e", "10"]:
                             return text
                     else:
@@ -482,14 +482,14 @@ def reassemble(blocks, flag, mode):
     return text
 
 
-def encrypt_ebc(text, key, rounds):
+def encrypt_ecb(text, key, rounds):
     """
-    encrypt_ebc(string, string, int) -> string
+    encrypt_ecb(string, string, int) -> string
 
-    Encrypts message using the EBC/ECB mode of operation.
+    Encrypts message using the ECB mode of operation.
     """
 
-    blocks=get_blocks(text, False, "EBC")
+    blocks=get_blocks(text, False, "ECB")
     keys=get_keys(key, rounds)
     for i in range(len(blocks)):
         blocks[i]=add_round_key(keys[0], blocks[i])
@@ -501,18 +501,18 @@ def encrypt_ebc(text, key, rounds):
         blocks[i]=sub_bytes(blocks[i])
         blocks[i]=shift_rows(blocks[i])
         blocks[i]=add_round_key(keys[rounds-1], blocks[i])
-    ciphertext=reassemble(blocks, True, "EBC")
+    ciphertext=reassemble(blocks, True, "ECB")
     return ciphertext
 
 
-def decrypt_ebc(ciphertext, key, rounds):
+def decrypt_ecb(ciphertext, key, rounds):
     """
-    decrypt_ebc(string, string, int) -> string
+    decrypt_ecb(string, string, int) -> string
 
-    Decrypts ciphertext using the EBC/ECB mode of operation.
+    Decrypts ciphertext using the ECB mode of operation.
     """
 
-    blocks=get_blocks(ciphertext, True, "EBC")
+    blocks=get_blocks(ciphertext, True, "ECB")
     keys=get_keys(key, rounds)
     for i in range(len(blocks)):
         blocks[i]=add_round_key(keys[rounds-1], blocks[i])
@@ -524,7 +524,7 @@ def decrypt_ebc(ciphertext, key, rounds):
             blocks[i]=shift_rows_inv(blocks[i])
             blocks[i]=sub_bytes_inv(blocks[i])
         blocks[i]=add_round_key(keys[0], blocks[i])
-    text=reassemble(blocks, False, "EBC")
+    text=reassemble(blocks, False, "ECB")
     return text
 
 
@@ -731,7 +731,7 @@ def process_request(mode, choice, message, rounds, raw_key, raw_iv=None):
         key+=str(decimal_to_16(ord(raw_key[i]), 2))
 
     iv=[]
-    if raw_iv is not None and mode not in ["EBC", "ECB"]:
+    if raw_iv is not None and mode!="ECB":
         temp1=[]
         temp2=[]
         temp3=[]
@@ -747,11 +747,11 @@ def process_request(mode, choice, message, rounds, raw_key, raw_iv=None):
         iv.append(temp4)
 
     # Select correct function
-    if mode in ["EBC", "ECB"]:
+    if mode == "ECB":
         if choice=="encrypt":
-            return encrypt_ebc(message, key, rounds)
+            return encrypt_ecb(message, key, rounds)
         else:
-            return decrypt_ebc(message, key, rounds)
+            return decrypt_ecb(message, key, rounds)
     elif mode=="CBC":
         if choice=="encrypt":
             return encrypt_cbc(message, key, iv, rounds)
@@ -776,10 +776,10 @@ def process_request(mode, choice, message, rounds, raw_key, raw_iv=None):
 
 if __name__=="__main__" and sys.platform!="emscripten": # preserved to run on its own if needed
     # Choose encryption method
-    print("Choose the encryption method (EBC, CBC, CFB, OFB, PCBC): ")
+    print("Choose the encryption method (ECB, CBC, CFB, OFB, PCBC): ")
     mode=input().upper().strip("!,.? ")
-    while mode not in ["EBC", "ECB", "CBC", "CFB", "OFB", "PCBC"]:
-        print("Invalid mode! Choose from EBC, CBC, CFB, OFB, PCBC: ")
+    while mode not in ["ECB", "CBC", "CFB", "OFB", "PCBC"]:
+        print("Invalid mode! Choose from ECB, CBC, CFB, OFB, PCBC: ")
         mode=input().upper().strip("!,.? ")
 
     # Choose encryption/decryption
@@ -818,7 +818,7 @@ if __name__=="__main__" and sys.platform!="emscripten": # preserved to run on it
 
     # Input initialization vector if needed
     temp_iv=None
-    if mode not in ["EBC", "ECB"]:
+    if mode!="ECB":
         print("Please input the initialization vector: (16 characters long)")
         temp_iv=input()
         while len(temp_iv)!=16:
