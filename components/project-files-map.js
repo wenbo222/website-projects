@@ -37,7 +37,8 @@ export const ProjectFilesMap = {
     '/major-projects/pathfinding-visualizer/index.html': [
         'index.html',
         'styles.css',
-        'main.js'
+        'main.js',
+        'algorithms.js'
     ],
     '/major-projects/web-browser/index.html': [
         'index.html',
