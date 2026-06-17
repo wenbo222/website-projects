@@ -27,7 +27,7 @@ resultBox.textContent = 'Loading Python environment via Pyodide, please wait...'
         pyProcessRequest = pyodideInstance.globals.get('process_request');
         processBtn.disabled = false;
         updateUI();
-        resultBox.textContent = 'Python code Loaded. Ready for encryption/decryption.';
+        resultBox.textContent = 'Python code loaded. Ready for encryption/decryption.';
     } catch (error) {
         console.error('Failed to load Pyodide or run AES.py:', error);
         resultBox.textContent = 'Error: Failed to load the Python environment. Details: '+error.message;
